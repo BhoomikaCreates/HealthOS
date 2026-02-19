@@ -24,7 +24,7 @@ function App() {
         {/* Header */}
         <div className="flex justify-between items-center mb-10">
           <div>
-            <h1 className="text-4xl font-bold">Good Morning, Bhoomi! ☀️</h1>
+            <h1 className="text-4xl font-bold">Good morning User! ☀️</h1>
             <p className="text-gray-400 mt-2">Let's crush your goals today! 💪</p>
           </div>
           <button className="bg-teal-500 px-6 py-2 rounded-full font-bold hover:bg-teal-600 transition shadow-lg shadow-teal-500/30">
