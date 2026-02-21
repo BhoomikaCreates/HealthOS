@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import Sidebar from "./components/Sidebar";
-// Added Zap (Streak) and Target (Plan) icons
-import { Droplets, Moon, Footprints, Flame, Bot, Zap, Target } from "lucide-react";
+import { Droplets, Moon, Footprints, Flame, Bot, Zap, Target, Plus, X } from "lucide-react";
 
 function App() {
+  // 1. Existing Stats State
   const [stats, setStats] = useState({
     water: "Loading...",
     sleep: "...",
@@ -11,6 +11,16 @@ function App() {
     calories: "..."
   });
 
+  // 2. Modal and Form State Management
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [formData, setFormData] = useState({
+    water: "",
+    sleep: "",
+    steps: "",
+    calories: ""
+  });
+
+  // Dummy data for initial load
   useEffect(() => {
     setStats({
       water: "1.2 Liters", 
@@ -40,20 +50,44 @@ function App() {
     return "Everything is sorted, maga! You're crushing your goals today! 💪";
   };
 
+  // Handle Form Submission Logic
+  const handleLogData = (e) => {
+    e.preventDefault();
+    console.log("Data to be sent to Database:", formData);
+    
+    // Updating frontend UI immediately for better user experience
+    setStats({
+      water: `${formData.water || 0} Liters`,
+      sleep: `${formData.sleep || 0} Hours`,
+      steps: formData.steps || "0",
+      calories: `${formData.calories || 0} Kcal`
+    });
+    
+    setIsModalOpen(false); // Close the modal
+    setFormData({ water: "", sleep: "", steps: "", calories: "" }); // Reset form fields
+  };
+
   return (
-    <div className="flex bg-black min-h-screen text-white">
+    <div className="flex bg-black min-h-screen text-white relative">
       <Sidebar />
 
       <div className="ml-64 p-8 w-full">
-        {/* Dynamic Header */}
+        {/* Dynamic Header with 'Log Activity' Button */}
         <div className="flex justify-between items-center mb-6">
           <div>
             <h1 className="text-4xl font-bold">{getGreeting()}! ✨</h1>
             <p className="text-gray-400 mt-2">Your Personal AI Tracker 🤖</p>
           </div>
+          
+          <button 
+            onClick={() => setIsModalOpen(true)}
+            className="bg-teal-500 hover:bg-teal-400 text-black font-bold py-3 px-6 rounded-full flex items-center gap-2 transition-all shadow-lg shadow-teal-500/20"
+          >
+            <Plus size={20} /> Log Activity
+          </button>
         </div>
 
-        {/* 🚨 AI SASSY BOT ALERT BOX 🚨 */}
+        {/* AI SASSY BOT ALERT BOX */}
         <div className="bg-gradient-to-r from-teal-900 to-slate-900 border border-teal-500/50 p-5 rounded-2xl mb-10 flex items-center gap-4 shadow-lg shadow-teal-500/10">
           <div className="bg-teal-500 p-3 rounded-full text-black">
             <Bot size={32} />
@@ -64,7 +98,7 @@ function App() {
           </div>
         </div>
         
-        {/* Pro Stats Grid with Lucide Icons */}
+        {/* Pro Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
           <div className="bg-slate-900 p-6 rounded-2xl border border-slate-800 hover:border-blue-500 transition-all">
             <div className="flex justify-between items-center mb-2">
@@ -73,7 +107,6 @@ function App() {
             </div>
             <p className="text-3xl font-bold text-blue-400">{stats.water}</p>
           </div>
-
           <div className="bg-slate-900 p-6 rounded-2xl border border-slate-800 hover:border-purple-500 transition-all">
             <div className="flex justify-between items-center mb-2">
               <h3 className="text-gray-400 text-sm font-bold uppercase">Sleep</h3>
@@ -81,7 +114,6 @@ function App() {
             </div>
             <p className="text-3xl font-bold text-purple-400">{stats.sleep}</p>
           </div>
-
            <div className="bg-slate-900 p-6 rounded-2xl border border-slate-800 hover:border-green-500 transition-all">
             <div className="flex justify-between items-center mb-2">
               <h3 className="text-gray-400 text-sm font-bold uppercase">Steps</h3>
@@ -89,7 +121,6 @@ function App() {
             </div>
             <p className="text-3xl font-bold text-green-400">{stats.steps}</p>
           </div>
-
            <div className="bg-slate-900 p-6 rounded-2xl border border-slate-800 hover:border-orange-500 transition-all">
              <div className="flex justify-between items-center mb-2">
               <h3 className="text-gray-400 text-sm font-bold uppercase">Calories</h3>
@@ -99,10 +130,8 @@ function App() {
           </div>
         </div>
 
-        {/* 🔥 NEW: Activity & Streak Section 🔥 */}
+        {/* Activity & Streak Section */}
         <div className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-8">
-           
-           {/* Today's Plan */}
            <div className="bg-slate-900 rounded-2xl border border-slate-800 p-6 md:col-span-2 shadow-lg hover:border-slate-600 transition-all">
               <div className="flex items-center gap-3 mb-6">
                 <div className="bg-teal-500/20 p-2 rounded-lg">
@@ -126,7 +155,6 @@ function App() {
               </ul>
            </div>
            
-           {/* Daily Streak */}
            <div className="bg-gradient-to-br from-orange-900/40 to-slate-900 border border-orange-500/30 rounded-2xl p-6 flex flex-col justify-center items-center text-center shadow-lg shadow-orange-500/10 hover:border-orange-500/50 transition-all">
               <div className="bg-orange-500/20 p-4 rounded-full mb-4 animate-pulse">
                 <Zap className="text-orange-400" size={40} />
@@ -135,10 +163,73 @@ function App() {
               <p className="text-6xl font-black text-white mt-2">12</p>
               <p className="text-orange-200/60 mt-2 font-medium">Days Active 🔥</p>
            </div>
-
         </div>
-
       </div>
+
+      {/* POPUP MODAL COMPONENT */}
+      {isModalOpen && (
+        <div className="absolute inset-0 bg-black/80 backdrop-blur-sm flex justify-center items-center z-50">
+          <div className="bg-slate-900 border border-slate-700 p-8 rounded-3xl w-full max-w-md shadow-2xl relative">
+            <button 
+              onClick={() => setIsModalOpen(false)}
+              className="absolute top-4 right-4 text-gray-400 hover:text-white"
+            >
+              <X size={24} />
+            </button>
+            <h2 className="text-2xl font-bold mb-6 text-white">Log Today's Activity</h2>
+            
+            <form onSubmit={handleLogData} className="space-y-4">
+              <div>
+                <label className="block text-gray-400 text-sm mb-1">Water (Liters)</label>
+                <input 
+                  type="number" step="0.1" required
+                  className="w-full bg-slate-800 text-white border border-slate-700 rounded-xl p-3 focus:outline-none focus:border-teal-500"
+                  value={formData.water}
+                  onChange={(e) => setFormData({...formData, water: e.target.value})}
+                  placeholder="e.g. 2.5"
+                />
+              </div>
+              <div>
+                <label className="block text-gray-400 text-sm mb-1">Sleep (Hours)</label>
+                <input 
+                  type="number" step="0.5" required
+                  className="w-full bg-slate-800 text-white border border-slate-700 rounded-xl p-3 focus:outline-none focus:border-teal-500"
+                  value={formData.sleep}
+                  onChange={(e) => setFormData({...formData, sleep: e.target.value})}
+                  placeholder="e.g. 7"
+                />
+              </div>
+              <div>
+                <label className="block text-gray-400 text-sm mb-1">Steps Walked</label>
+                <input 
+                  type="number" required
+                  className="w-full bg-slate-800 text-white border border-slate-700 rounded-xl p-3 focus:outline-none focus:border-teal-500"
+                  value={formData.steps}
+                  onChange={(e) => setFormData({...formData, steps: e.target.value})}
+                  placeholder="e.g. 8000"
+                />
+              </div>
+              <div>
+                <label className="block text-gray-400 text-sm mb-1">Calories Burned (Kcal)</label>
+                <input 
+                  type="number" required
+                  className="w-full bg-slate-800 text-white border border-slate-700 rounded-xl p-3 focus:outline-none focus:border-teal-500"
+                  value={formData.calories}
+                  onChange={(e) => setFormData({...formData, calories: e.target.value})}
+                  placeholder="e.g. 2100"
+                />
+              </div>
+              <button 
+                type="submit"
+                className="w-full bg-teal-500 hover:bg-teal-400 text-black font-bold py-3 rounded-xl mt-4 transition-all"
+              >
+                Save to Database 🚀
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }
