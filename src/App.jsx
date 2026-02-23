@@ -1,9 +1,22 @@
 import React, { useEffect, useState } from "react";
 import Sidebar from "./components/Sidebar";
 import { Droplets, Moon, Footprints, Flame, Bot, Zap, Target, Plus, X } from "lucide-react";
+// NEW: Recharts imports for rendering the progress graphs
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+
+// NEW: Dummy data array for the weekly progress chart
+const weeklyData = [
+  { name: 'Mon', water: 1.5, sleep: 5 },
+  { name: 'Tue', water: 2.0, sleep: 6 },
+  { name: 'Wed', water: 2.5, sleep: 7 },
+  { name: 'Thu', water: 1.8, sleep: 4.5 },
+  { name: 'Fri', water: 3.0, sleep: 8 },
+  { name: 'Sat', water: 2.8, sleep: 7.5 },
+  { name: 'Sun', water: 2.2, sleep: 6.5 },
+];
 
 function App() {
-  // 1. Existing Stats State
+  // 1. Dashboard Statistics State
   const [stats, setStats] = useState({
     water: "Loading...",
     sleep: "...",
@@ -11,7 +24,7 @@ function App() {
     calories: "..."
   });
 
-  // 2. Modal and Form State Management
+  // 2. Modal Visibility and Form Data State
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState({
     water: "",
@@ -20,7 +33,7 @@ function App() {
     calories: ""
   });
 
-  // Dummy data for initial load
+  // Populate initial dummy data on component mount
   useEffect(() => {
     setStats({
       water: "1.2 Liters", 
@@ -30,7 +43,7 @@ function App() {
     });
   }, []);
 
-  // 🧠 AI BRAIN 1: Time-based Namma Bengaluru Greetings
+  // AI BRAIN 1: Dynamic time-based greeting logic (Bengaluru Theme)
   const getGreeting = () => {
     const hour = new Date().getHours();
     if (hour >= 5 && hour < 12) return "Good Morning, machha";
@@ -39,23 +52,31 @@ function App() {
     return "It's late night, maga";
   };
 
-  // 🧠 AI BRAIN 2: Bengaluru Slang Sassy Messages
+  // AI BRAIN 2: Dynamic health analysis and sassy feedback
   const getSassyMessage = () => {
     const hour = new Date().getHours();
+    
+    // Check for late-night app usage
     if (hour >= 0 && hour <= 4) return "Bro, what are you doing up at this hour? Go sleep maga, or tomorrow you'll be a zombie at work! 🦉";
+    
+    // Check for sleep deprivation
     const sleepHours = parseInt(stats.sleep) || 0;
     if (stats.sleep !== "..." && sleepHours < 5) return "Guru, are you crazy? Just 4 hours of sleep? You're running on fumes machha. Go catch some Zs! 🧟‍♀️";
+    
+    // Check for dehydration
     const waterQty = parseFloat(stats.water) || 0;
     if (stats.water !== "Loading..." && waterQty < 2) return "Machha, did you forget water exists? You're going to dehydrate and dry up. Drink a glass right now! 💧";
+    
+    // Default positive reinforcement
     return "Everything is sorted, maga! You're crushing your goals today! 💪";
   };
 
-  // Handle Form Submission Logic
+  // Handle data submission from the activity logging modal
   const handleLogData = (e) => {
     e.preventDefault();
-    console.log("Data to be sent to Database:", formData);
+    console.log("Data ready to be dispatched to Database:", formData);
     
-    // Updating frontend UI immediately for better user experience
+    // Optimistic UI update to reflect changes immediately
     setStats({
       water: `${formData.water || 0} Liters`,
       sleep: `${formData.sleep || 0} Hours`,
@@ -63,8 +84,9 @@ function App() {
       calories: `${formData.calories || 0} Kcal`
     });
     
-    setIsModalOpen(false); // Close the modal
-    setFormData({ water: "", sleep: "", steps: "", calories: "" }); // Reset form fields
+    // Close modal and reset form state
+    setIsModalOpen(false); 
+    setFormData({ water: "", sleep: "", steps: "", calories: "" }); 
   };
 
   return (
@@ -72,13 +94,15 @@ function App() {
       <Sidebar />
 
       <div className="ml-64 p-8 w-full">
-        {/* Dynamic Header with 'Log Activity' Button */}
+        
+        {/* Header Section */}
         <div className="flex justify-between items-center mb-6">
           <div>
             <h1 className="text-4xl font-bold">{getGreeting()}! ✨</h1>
             <p className="text-gray-400 mt-2">Your Personal AI Tracker 🤖</p>
           </div>
           
+          {/* Trigger button for Activity Modal */}
           <button 
             onClick={() => setIsModalOpen(true)}
             className="bg-teal-500 hover:bg-teal-400 text-black font-bold py-3 px-6 rounded-full flex items-center gap-2 transition-all shadow-lg shadow-teal-500/20"
@@ -87,7 +111,7 @@ function App() {
           </button>
         </div>
 
-        {/* AI SASSY BOT ALERT BOX */}
+        {/* AI Health Agent Feedback Banner */}
         <div className="bg-gradient-to-r from-teal-900 to-slate-900 border border-teal-500/50 p-5 rounded-2xl mb-10 flex items-center gap-4 shadow-lg shadow-teal-500/10">
           <div className="bg-teal-500 p-3 rounded-full text-black">
             <Bot size={32} />
@@ -98,7 +122,7 @@ function App() {
           </div>
         </div>
         
-        {/* Pro Stats Grid */}
+        {/* Core Metrics Grid */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
           <div className="bg-slate-900 p-6 rounded-2xl border border-slate-800 hover:border-blue-500 transition-all">
             <div className="flex justify-between items-center mb-2">
@@ -130,8 +154,41 @@ function App() {
           </div>
         </div>
 
-        {/* Activity & Streak Section */}
+        {/* Weekly Progress Analytics Chart */}
+        <div className="mt-10 bg-slate-900 p-6 rounded-2xl border border-slate-800 shadow-lg hover:border-slate-700 transition-all">
+          <h2 className="text-xl font-bold text-white mb-6">Weekly Progress Overview 📈</h2>
+          <div className="h-72 w-full">
+            <ResponsiveContainer width="100%" height="100%">
+              <AreaChart data={weeklyData}>
+                <defs>
+                  {/* Custom SVG Gradients for chart aesthetics */}
+                  <linearGradient id="colorWater" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.4}/>
+                    <stop offset="95%" stopColor="#3b82f6" stopOpacity={0}/>
+                  </linearGradient>
+                  <linearGradient id="colorSleep" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#a855f7" stopOpacity={0.4}/>
+                    <stop offset="95%" stopColor="#a855f7" stopOpacity={0}/>
+                  </linearGradient>
+                </defs>
+                <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" vertical={false} />
+                <XAxis dataKey="name" stroke="#64748b" axisLine={false} tickLine={false} />
+                <YAxis stroke="#64748b" axisLine={false} tickLine={false} />
+                <Tooltip 
+                  contentStyle={{ backgroundColor: '#0f172a', borderColor: '#1e293b', color: '#fff', borderRadius: '12px' }} 
+                  itemStyle={{ fontWeight: 'bold' }}
+                />
+                <Area type="monotone" dataKey="water" stroke="#3b82f6" strokeWidth={3} fillOpacity={1} fill="url(#colorWater)" name="Water (Liters)" />
+                <Area type="monotone" dataKey="sleep" stroke="#a855f7" strokeWidth={3} fillOpacity={1} fill="url(#colorSleep)" name="Sleep (Hours)" />
+              </AreaChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+
+        {/* Daily Tasks and Streak Gamification Section */}
         <div className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-8">
+           
+           {/* Action Plan Component */}
            <div className="bg-slate-900 rounded-2xl border border-slate-800 p-6 md:col-span-2 shadow-lg hover:border-slate-600 transition-all">
               <div className="flex items-center gap-3 mb-6">
                 <div className="bg-teal-500/20 p-2 rounded-lg">
@@ -155,6 +212,7 @@ function App() {
               </ul>
            </div>
            
+           {/* User Retention Streak Component */}
            <div className="bg-gradient-to-br from-orange-900/40 to-slate-900 border border-orange-500/30 rounded-2xl p-6 flex flex-col justify-center items-center text-center shadow-lg shadow-orange-500/10 hover:border-orange-500/50 transition-all">
               <div className="bg-orange-500/20 p-4 rounded-full mb-4 animate-pulse">
                 <Zap className="text-orange-400" size={40} />
@@ -166,10 +224,12 @@ function App() {
         </div>
       </div>
 
-      {/* POPUP MODAL COMPONENT */}
+      {/* Activity Input Modal Overlay */}
       {isModalOpen && (
         <div className="absolute inset-0 bg-black/80 backdrop-blur-sm flex justify-center items-center z-50">
           <div className="bg-slate-900 border border-slate-700 p-8 rounded-3xl w-full max-w-md shadow-2xl relative">
+            
+            {/* Modal Close Button */}
             <button 
               onClick={() => setIsModalOpen(false)}
               className="absolute top-4 right-4 text-gray-400 hover:text-white"
@@ -178,6 +238,7 @@ function App() {
             </button>
             <h2 className="text-2xl font-bold mb-6 text-white">Log Today's Activity</h2>
             
+            {/* Activity Data Form */}
             <form onSubmit={handleLogData} className="space-y-4">
               <div>
                 <label className="block text-gray-400 text-sm mb-1">Water (Liters)</label>
@@ -219,6 +280,8 @@ function App() {
                   placeholder="e.g. 2100"
                 />
               </div>
+              
+              {/* Form Submit Button */}
               <button 
                 type="submit"
                 className="w-full bg-teal-500 hover:bg-teal-400 text-black font-bold py-3 rounded-xl mt-4 transition-all"
