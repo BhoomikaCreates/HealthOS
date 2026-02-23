@@ -1,26 +1,37 @@
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
+const mongoose = require('mongoose'); 
 
-dotenv.config();
+// Setup Secret Locker
+dotenv.config(); 
 const app = express();
+const PORT = process.env.PORT || 5000;
 
+// Middlewares
 app.use(cors());
 app.use(express.json());
 
-// Test Route
-// API Route - Ispe frontend request karega
-// API Route - Personal Health Data
+// 🚀 MONGODB CONNECTION MAGIC 🚀
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => {
+    console.log("🟢 DATABASE CONNECT HO GAYA! PARTY!! 🎉");
+  })
+  .catch((err) => {
+    console.log("🔴 Database connection fail ho gaya bhai:", err);
+  });
+
+// API Route (Dummy data for now)
 app.get('/api/dashboard', (req, res) => {
   res.json({
-    water: "2.5 Liters",
-    sleep: "7 Hours",
+    water: "1.2 Liters",
+    sleep: "4 Hours",
     steps: "8,432",
     calories: "2,100 Kcal",
-    mood: "Happy 😊"
   });
 });
-const PORT = 5000;
+
+// Start Server
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT} 🔥`);
+  console.log(`✅ Backend Server start ho gaya hai Port ${PORT} par!`);
 });
