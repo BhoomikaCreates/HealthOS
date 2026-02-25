@@ -28,6 +28,7 @@ const Auth = ({ onLoginSuccess }) => {
         // Save token and user info to browser storage
         localStorage.setItem('token', data.token);
         localStorage.setItem('userName', data.user.name);
+        localStorage.setItem('userEmail', data.user.email);
         
         // Tell App.jsx that login is successful
         onLoginSuccess();

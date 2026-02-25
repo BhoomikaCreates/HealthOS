@@ -1,3 +1,4 @@
+import ProfileModal from './components/profilemodal';
 import Auth from "./components/Auth";
 import React, { useEffect, useState } from "react";
 import Sidebar from "./components/Sidebar";
@@ -14,6 +15,9 @@ function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState({ water: "", sleep: "", steps: "", calories: "" });
   const [aiMessage, setAiMessage] = useState("Analyzing your lifestyle... 🕵️‍♀️");
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const userName = localStorage.getItem('userName') || 'User';
+  const [avatarSeed, setAvatarSeed] = useState(localStorage.getItem('avatarSeed') || userName);
 
   // Fetch Health Data with Smart Fallback
   const fetchHealthData = async () => {
@@ -85,7 +89,15 @@ function App() {
             <h1 className="text-4xl font-bold">{getGreeting()}, bro! ✨</h1>
             <p className="text-gray-400 mt-2">Your Personal AI Tracker 🤖</p>
           </div>
-          <button onClick={() => setIsModalOpen(true)} className="bg-teal-500 hover:bg-teal-400 text-black font-bold py-3 px-6 rounded-full flex items-center gap-2 shadow-lg shadow-teal-500/20"><Plus size={20} /> Log Activity</button>
+          <div className="flex items-center gap-4">
+            <button onClick={() => setIsModalOpen(true)} className="bg-teal-500 hover:bg-teal-400 text-black font-bold py-3 px-6 rounded-full flex items-center gap-2 shadow-lg shadow-teal-500/20">
+              <Plus size={20} /> Log Activity
+            </button>
+            
+            {/* PROFILE AVATAR BUTTON */}
+            <button onClick={() => setIsProfileOpen(true)} className="w-12 h-12 rounded-full border-2 border-teal-500/50 hover:border-teal-400 hover:scale-105 overflow-hidden transition-all shadow-lg shadow-teal-500/20 p-0.5 bg-slate-800">
+<img src={`https://api.dicebear.com/9.x/micah/svg?seed=${avatarSeed}`} alt="Profile" className="w-full h-full rounded-full bg-teal-500/10" />            </button>
+          </div>
         </div>
 
         {/* 🔥 ANIMATED AI AGENT SECTION */}
@@ -175,6 +187,13 @@ function App() {
           </div>
         </div>
       )}
+      <ProfileModal 
+        isOpen={isProfileOpen} 
+        onClose={() => setIsProfileOpen(false)} 
+        onLogout={() => setIsAuthenticated(false)} 
+        avatarSeed={avatarSeed}       
+        setAvatarSeed={setAvatarSeed}
+      />
         </div>
       )}
     </>
