@@ -1,3 +1,4 @@
+import Auth from "./components/Auth";
 import React, { useEffect, useState } from "react";
 import Sidebar from "./components/Sidebar";
 import Lottie from "lottie-react";
@@ -7,6 +8,7 @@ import { Droplets, Moon, Footprints, Flame, Plus, X, Sparkles, Target, Trophy, Z
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem('token'));
   const [stats, setStats] = useState({ water: "Loading...", sleep: "...", steps: "...", calories: "..." });
   const [weeklyData, setWeeklyData] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -16,7 +18,7 @@ function App() {
   // Fetch Health Data with Smart Fallback
   const fetchHealthData = async () => {
     try {
-      const response = await fetch("http://localhost:5000/api/health-data");
+      const response = await fetch("http://localhost:5005/api/health-data");
       if (!response.ok) throw new Error();
       const data = await response.json();
       if (data.length > 0) {
@@ -37,7 +39,7 @@ function App() {
   // Fetch AI Insight with Smart Fallback
   const fetchAIInsight = async () => {
     try {
-      const response = await fetch("http://localhost:5000/api/ai-insight");
+      const response = await fetch("http://localhost:5005/api/ai-insight");
       const data = await response.json();
       setAiMessage(data.message); 
     } catch (error) {
@@ -50,7 +52,7 @@ function App() {
   const handleLogData = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:5000/api/health-data", {
+      const response = await fetch("http://localhost:5005/api/health-data", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ water: parseFloat(formData.water), sleep: parseFloat(formData.sleep), steps: parseInt(formData.steps), calories: parseInt(formData.calories) })
@@ -60,7 +62,11 @@ function App() {
   };
 
   return (
-    <div className="flex bg-black min-h-screen text-white relative">
+  <>
+    {!isAuthenticated ? (
+      <Auth onLoginSuccess={() => setIsAuthenticated(true)} />
+    ) : (
+      <div className="flex bg-black min-h-screen text-white relative">
       <Sidebar />
       <div className="ml-64 p-8 w-full">
         <div className="flex justify-between items-center mb-6">
@@ -82,7 +88,7 @@ function App() {
               <h2 className="text-teal-300 font-bold text-xl flex items-center gap-2">Gemini Health Agent <Sparkles size={18} className="text-yellow-400" /></h2>
               <div className="flex items-center gap-2 bg-black/50 px-3 py-1.5 rounded-full border border-teal-500/30">
                 <span className="w-2.5 h-2.5 bg-green-500 rounded-full animate-pulse shadow-[0_0_8px_#22c55e]"></span>
-                <span className="text-xs text-teal-400 font-mono tracking-wider">v2.5-FLASH</span>
+                <span className="text-xs text-teal-400 font-mono tracking-wider">v1.5-FLASH</span>
               </div>
             </div>
             <div className="bg-black/40 backdrop-blur-md border border-slate-700/50 p-4 rounded-2xl rounded-tl-none">
@@ -158,7 +164,9 @@ function App() {
           </div>
         </div>
       )}
-    </div>
+        </div>
+      )}
+    </>
   );
 }
 
