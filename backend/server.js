@@ -1,3 +1,4 @@
+const { GoogleGenerativeAI } = require('@google/generative-ai');
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
@@ -46,11 +47,6 @@ app.post('/api/health-data', async (req, res) => {
   }
 });
 
-// Start the Express server
-app.listen(PORT, () => {
-  console.log('✅ Backend Server running on Port ${PORT}');
-});
-
 // GET API: Fetch the latest 7 days of health data for the dashboard charts
 app.get('/api/health-data', async (req, res) => {
   try {
@@ -65,3 +61,43 @@ app.get('/api/health-data', async (req, res) => {
     res.status(500).json({ error: "Failed to fetch data from the server." });
   }
 });
+
+// GET API: Generate Dynamic Sassy AI Insight using Google Gemini
+console.log("✅ AI Insight Route Loaded");
+app.get('/api/ai-insight', async (req, res) => {
+  try {
+    // 1. Fetch the most recent health record from the database
+    const latestData = await HealthData.findOne().sort({ date: -1 });
+    
+    // Fallback if the database is completely empty
+    if (!latestData) {
+      return res.status(200).json({ message: "Welcome machha! Log your first activity so I can judge your lifestyle! 🤖" });
+    }
+
+    // 2. Initialize the Google Generative AI client
+    const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+
+    // 3. Construct the dynamic prompt using the user's actual data
+    const prompt = `You are a sarcastic, highly intelligent AI health agent based in Bengaluru. You frequently use local slang like 'machha', 'guru', 'maga', 'benki'. 
+    Here is the user's health data for today: 
+    Water: ${latestData.water} Liters, Sleep: ${latestData.sleep} Hours, Steps: ${latestData.steps}, Calories: ${latestData.calories} kcal.
+    Analyze this data and provide a 1-sentence sassy roast or praise. Be dramatic but ultimately helpful.`;
+
+    // 4. Generate the response from the Gemini model
+    const result = await model.generateContent(prompt);
+    const aiResponse = result.response.text();
+    
+    // Send the AI generated text back to the frontend
+    res.status(200).json({ message: aiResponse });
+
+  } catch (error) {
+    console.error("Gemini API Error:", error);
+    res.status(500).json({ error: "The AI brain is currently experiencing downtime." });
+  }
+});
+// Start the Express server
+app.listen(PORT, () => {
+  console.log(`✅ Backend Server running on Port ${PORT}`);
+}); 
+
