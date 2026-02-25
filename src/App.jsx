@@ -16,7 +16,7 @@ function App() {
   // Fetch Health Data with Smart Fallback
   const fetchHealthData = async () => {
     try {
-      const response = await fetch("http://localhost:5000/api/health-data");
+      const response = await fetch("http://localhost:5005/api/health-data");
       if (!response.ok) throw new Error();
       const data = await response.json();
       if (data.length > 0) {
@@ -37,7 +37,7 @@ function App() {
   // Fetch AI Insight with Smart Fallback
   const fetchAIInsight = async () => {
     try {
-      const response = await fetch("http://localhost:5000/api/ai-insight");
+      const response = await fetch("http://localhost:5005/api/ai-insight");
       const data = await response.json();
       setAiMessage(data.message); 
     } catch (error) {
@@ -50,13 +50,24 @@ function App() {
   const handleLogData = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:5000/api/health-data", {
+      const response = await fetch("http://localhost:5005/api/health-data", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ water: parseFloat(formData.water), sleep: parseFloat(formData.sleep), steps: parseInt(formData.steps), calories: parseInt(formData.calories) })
       });
       if (response.ok) { setIsModalOpen(false); setFormData({ water: "", sleep: "", steps: "", calories: "" }); fetchHealthData(); fetchAIInsight(); }
     } catch (error) { alert("Error saving data."); }
+  };
+  
+  const getGreeting = () => {
+    const hour = new Date().getHours();
+    
+    // Midnight Sarcasm (11 PM to 4 AM)
+    if (hour >= 23 || hour < 4) return "Go to sleep, machha"; 
+    
+    if (hour < 12) return "Good Morning";
+    if (hour < 18) return "Good Afternoon";
+    return "Good Evening";
   };
 
   return (
@@ -65,7 +76,7 @@ function App() {
       <div className="ml-64 p-8 w-full">
         <div className="flex justify-between items-center mb-6">
           <div>
-            <h1 className="text-4xl font-bold">Good Evening, bro! ✨</h1>
+            <h1 className="text-4xl font-bold">{getGreeting()}, bro! ✨</h1>
             <p className="text-gray-400 mt-2">Your Personal AI Tracker 🤖</p>
           </div>
           <button onClick={() => setIsModalOpen(true)} className="bg-teal-500 hover:bg-teal-400 text-black font-bold py-3 px-6 rounded-full flex items-center gap-2 shadow-lg shadow-teal-500/20"><Plus size={20} /> Log Activity</button>
