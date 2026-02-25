@@ -1,8 +1,12 @@
 const { GoogleGenerativeAI } = require('@google/generative-ai');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const User = require('./models/User');
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const mongoose = require('mongoose'); 
+
 
 // Import the database blueprint we just created
 const HealthData = require('./models/HealthData');
@@ -24,6 +28,65 @@ mongoose.connect(process.env.MONGO_URI)
     console.log("🔴 Database connection failed:", err);
   });
 
+  // ==========================================
+// 🔐 AUTHENTICATION ROUTES (LOGIN & SIGNUP)
+// ==========================================
+
+// 1. SIGNUP ROUTE (Create a new account)
+app.post('/api/auth/register', async (req, res) => {
+  try {
+    const { name, email, password } = req.body;
+
+    // Check if user already exists
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ error: "User already exists! Log in instead, machha." });
+    }
+
+    // Hash the password (Security step)
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    // Save new user to MongoDB
+    const newUser = new User({ name, email, password: hashedPassword });
+    await newUser.save();
+
+    // Create a token
+    const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
+
+    res.status(201).json({ token, user: { id: newUser._id, name: newUser.name, email: newUser.email } });
+  } catch (error) {
+    console.error("Signup Error:", error);
+    res.status(500).json({ error: "Server crashed during signup." });
+  }
+});
+
+// 2. LOGIN ROUTE
+app.post('/api/auth/login', async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    // Find user in database
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ error: "User not found! Register first." });
+    }
+
+    // Check if password matches
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ error: "Wrong password, guru!" });
+    }
+
+    // Create a token
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
+
+    res.status(200).json({ token, user: { id: user._id, name: user.name, email: user.email } });
+  } catch (error) {
+    console.error("Login Error:", error);
+    res.status(500).json({ error: "Server crashed during login." });
+  }
+});
 // 🚀 POST API: Save new activity log to the database
 app.post('/api/health-data', async (req, res) => {
   try {
