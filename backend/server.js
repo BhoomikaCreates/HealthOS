@@ -159,6 +159,33 @@ app.get('/api/ai-insight', async (req, res) => {
     res.status(500).json({ error: "The AI brain is currently experiencing downtime." });
   }
 });
+// 1. Model initialize karte waqt hi behavior set karein
+const model = genAI.getGenerativeModel({ 
+    model: "gemini-1.5-flash",
+    // Yahan system instruction daalein
+    systemInstruction: "You are a highly professional, empathetic medical and fitness advisor. Answer user queries clearly and factually. No sarcasm. Use a supportive tone but maintain medical accuracy.",
+}); 
+
+app.post('/api/chat', async (req, res) => {
+    try {
+        const { message } = req.body;
+
+        if (!message) return res.status(400).json({ error: "Kuch toh bolo!" });
+
+        // Ab model hamesha professional behave karega
+        const result = await model.generateContent(message);
+        const response = await result.response;
+        const text = response.text();
+
+        res.json({ 
+            success: true,
+            reply: text 
+        });
+
+    } catch (error) {
+        // ... (rest of your error handling)
+    }
+});
 // Start the Express server
 app.listen(PORT, () => {
   console.log(`✅ Backend Server running on Port ${PORT}`);
