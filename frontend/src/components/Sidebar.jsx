@@ -1,23 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, useLocation } from 'react-router-dom';
+import Chatbot from "./Chatbot/chatbot";
 
 const Sidebar = () => {
   const location = useLocation();
-
-  // Smart logic: Check karta hai ki user kis page par hai
+  const [isChatOpen, setIsChatOpen] = useState(false);
   const isActive = (path) => location.pathname === path;
-
-  // Active aur Inactive buttons ke designs
   const activeStyle = "p-3 bg-teal-600 text-white rounded-lg cursor-pointer block transition-all font-bold shadow-lg shadow-teal-500/20";
   const inactiveStyle = "p-3 hover:bg-slate-800 text-gray-300 rounded-lg cursor-pointer block transition-all";
 
   return (
-    <div className="w-64 h-screen bg-slate-900 text-white p-5 fixed left-0 top-0 border-r border-slate-800 z-40">
+    // ✅ FIX 1: restored exact original width w-64, added flex flex-col for bottom button
+    <div className="w-64 h-screen bg-slate-900 text-white p-5 fixed left-0 top-0 border-r border-slate-800 z-40 flex flex-col">
       <h1 className="text-2xl font-bold text-teal-400 mb-10 flex items-center gap-2">
         🧘‍♀️ HealthOS
       </h1>
       
-      <nav className="space-y-4">
+      <nav className="space-y-4 flex-1">
         <Link to="/" className={isActive('/') ? activeStyle : inactiveStyle}>
           📊 Dashboard
         </Link>
@@ -26,11 +25,11 @@ const Sidebar = () => {
           🏃‍♀️ Workout Tracker
         </Link>
 
-        {/* 👇 NAYA CHATBOT ROUTE 👇 */}
+        {/* ✅ FIX 2: Health Advisor nav link kept — clicking trigger below opens chat */}
         <Link to="/chat" className={isActive('/chat') ? activeStyle : inactiveStyle}>
           🤖 Health Advisor
         </Link>
-        
+
         <Link to="/yoga" className={isActive('/yoga') ? activeStyle : inactiveStyle}>
           🧘 Yoga & Meditation
         </Link>
@@ -43,6 +42,24 @@ const Sidebar = () => {
           💧 Water Intake
         </Link>
       </nav>
+
+      {/* ✅ FIX 2: Trigger only toggles chatbot popup, does NOT navigate */}
+      <div
+        onClick={() => setIsChatOpen(prev => !prev)}
+        className="mt-4 p-4 bg-gradient-to-r from-teal-600 to-teal-500 rounded-2xl cursor-pointer hover:from-teal-500 hover:to-teal-400 transition-all shadow-lg shadow-teal-500/30"
+      >
+        <div className="flex items-center gap-3">
+          <span className="text-2xl">🤖</span>
+          <div>
+            <p className="text-sm font-bold text-white">AI Health Agent</p>
+            <p className="text-xs text-teal-100">Ask anything...</p>
+          </div>
+          <span className="ml-auto text-white text-lg">{isChatOpen ? '✕' : '↑'}</span>
+        </div>
+      </div>
+
+      {/* ✅ FIX 3: isChatOpen passed correctly — close button in Chatbot will call setIsOpen(false) */}
+      <Chatbot isOpen={isChatOpen} setIsOpen={setIsChatOpen} />
     </div>
   );
 };

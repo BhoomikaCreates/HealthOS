@@ -1,5 +1,4 @@
-const { GoogleGenerativeAI } = require('@google/generative-ai');
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+const { GoogleGenerativeAI } = require("@google/generative-ai");
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('./models/User');
@@ -7,7 +6,11 @@ const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const mongoose = require('mongoose'); 
-
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+const model = genAI.getGenerativeModel({ 
+    model: "gemini-2.5-flash",
+    systemInstruction: "You are a concise health advisor for HealthOS. Rules: 1) Keep answers under 80 words. 2) Use short paragraphs, never walls of text. 3) Add a line break between each point. 4) Use minimal emoji — only when genuinely useful, never decorative. 5) No cliche phrases. 6) If listing steps or tips, use a numbered list with line breaks. Be direct and informative."
+    });
 
 // Import the database blueprint we just created
 const HealthData = require('./models/HealthData');
@@ -160,31 +163,17 @@ app.get('/api/ai-insight', async (req, res) => {
     res.status(500).json({ error: "The AI brain is currently experiencing downtime." });
   }
 });
-// 1. Model initialize karte waqt hi behavior set karein
-const model = genAI.getGenerativeModel({ 
-    model: "gemini-1.5-flash",
-    // Yahan system instruction daalein
-    systemInstruction: "You are a highly professional, empathetic medical and fitness advisor. Answer user queries clearly and factually. No sarcasm. Use a supportive tone but maintain medical accuracy.",
-}); 
 
 app.post('/api/chat', async (req, res) => {
     try {
         const { message } = req.body;
-
-        if (!message) return res.status(400).json({ error: "Kuch toh bolo!" });
-
-        // Ab model hamesha professional behave karega
+        if (!message) return res.status(400).json({ error: "Message is required" });
         const result = await model.generateContent(message);
         const response = await result.response;
-        const text = response.text();
-
-        res.json({ 
-            success: true,
-            reply: text 
-        });
-
+        res.json({ reply: response.text() });
     } catch (error) {
-        // ... (rest of your error handling)
+        console.error(error);
+        res.status(500).json({ error: "Gemini API Error" });
     }
 });
 // Start the Express server

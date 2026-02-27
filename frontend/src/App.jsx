@@ -8,6 +8,7 @@ import Lottie from "lottie-react";
 import robotAnimation from "./assets/robot.json"; 
 import { Droplets, Moon, Footprints, Flame, Plus, X, Sparkles, Target, Trophy, Zap, Watch, Share2 } from "lucide-react";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import WorkoutTracker from "./components/WorkoutTracker/WorkoutTracker";
 
 // 👇 NAYE IMPORTS 👇
 import { Routes, Route } from 'react-router-dom';
@@ -192,7 +193,7 @@ function App() {
           <Route path="/water" element={<WaterIntake />} />
 
           {/* DUMMY ROUTES (Taki sidebar pe click karne pe error na aaye) */}
-          <Route path="/workout" element={<div className="flex flex-col items-center justify-center h-full"><h1 className="text-5xl font-bold text-teal-400 mb-4">💪 Workout Tracker</h1><p className="text-gray-400">Partner is building this...</p></div>} />
+          <Route path="/workout" element={<WorkoutTracker />} />
           <Route path="/chat" element={<div className="flex flex-col items-center justify-center h-full"><h1 className="text-5xl font-bold text-teal-400 mb-4">🤖 Health Advisor</h1><p className="text-gray-400">Partner is building this...</p></div>} />
           <Route path="/yoga" element={<div className="flex flex-col items-center justify-center h-full"><h1 className="text-5xl font-bold text-teal-400 mb-4">🧘 Yoga & Meditation</h1><p className="text-gray-400">Coming soon...</p></div>} />
           <Route path="/sleep" element={<div className="flex flex-col items-center justify-center h-full"><h1 className="text-5xl font-bold text-teal-400 mb-4">😴 Sleep Schedule</h1><p className="text-gray-400">Coming soon...</p></div>} />
