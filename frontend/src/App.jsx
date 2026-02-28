@@ -107,52 +107,53 @@ function App() {
   };
 
   return (
-    <div className={`min-h-screen transition-colors duration-300 ${darkMode ? 'dark bg-slate-950' : 'bg-slate-50'}`}>
-      {!isAuthenticated ? (
-        <Auth onLoginSuccess={() => setIsAuthenticated(true)} />
-      ) : (
-        <div className="flex relative">
+  <div className={`min-h-screen w-full transition-colors duration-300 ${darkMode ? 'dark bg-slate-950' : 'bg-slate-50'}`}>
+    {!isAuthenticated ? (
+      <Auth onLoginSuccess={() => setIsAuthenticated(true)} />
+    ) : (
+      <div className="flex min-h-screen relative overflow-x-hidden">
+        
+        {/* 1. SIDEBAR: Fixed on Laptop, Drawer on Mobile */}
+        <Sidebar isOpen={isSidebarOpen} toggleSidebar={() => setIsSidebarOpen(false)} />
+
+        {/* 2. MAIN CONTENT WRAPPER */}
+        {/* 'flex-1' ensures it takes the remaining space next to sidebar on laptop */}
+        <div className="flex-1 flex flex-col min-w-0 transition-all duration-300">
           
-          {/* 1. SIDEBAR (Laptop pe static, Mobile pe Drawer) */}
-          <Sidebar isOpen={isSidebarOpen} toggleSidebar={() => setIsSidebarOpen(false)} />
+          {/* 📱 MOBILE HEADER (Hidden on Laptop) */}
+          <header className="md:hidden flex items-center justify-between px-4 h-16 bg-white dark:bg-slate-900 border-b dark:border-slate-800 sticky top-0 z-40">
+            <button onClick={() => setIsSidebarOpen(true)} className="p-2 text-slate-600 dark:text-slate-300">
+              <Menu size={24} />
+            </button>
+            <span className="font-bold text-slate-800 dark:text-white">HealthOS</span>
+            <button onClick={() => setIsProfileOpen(true)} className="w-8 h-8 rounded-full border border-teal-500 overflow-hidden">
+              <img src={`https://api.dicebear.com/9.x/micah/svg?seed=${avatarSeed}`} alt="Profile" />
+            </button>
+          </header>
 
-          {/* 2. MAIN CONTENT AREA */}
-          <div className="flex-1 flex flex-col min-w-0 h-screen overflow-hidden">
-            
-            {/* 📱 MOBILE HEADER (Laptop pe Hidden) */}
-            <header className="flex md:hidden items-center justify-between px-4 h-16 bg-white dark:bg-slate-900 border-b dark:border-slate-800 shrink-0 z-40">
-              <button onClick={() => setIsSidebarOpen(true)} className="p-2 text-slate-600 dark:text-slate-300">
-                <Menu size={24} />
-              </button>
-              <span className="font-bold text-slate-800 dark:text-white">HealthOS</span>
-              <button onClick={() => setIsProfileOpen(true)} className="w-8 h-8 rounded-full border border-teal-500 overflow-hidden">
-                <img src={`https://api.dicebear.com/9.x/micah/svg?seed=${avatarSeed}`} alt="Profile" />
-              </button>
-            </header>
-
-            {/* 💻 SCROLLABLE CONTENT */}
-            <main className="flex-1 overflow-y-auto p-4 md:p-8 pt-6 md:pt-10">
-              <div className="max-w-[1400px] mx-auto">
-                
-                {/* TOP HEADER SECTION */}
-                <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
-                  <div>
-                    <h1 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white">{getGreeting()}</h1>
-                    <p className="text-slate-500 dark:text-slate-400 mt-2 italic">Your Personal AI Tracker 🤖</p>
-                  </div>
-                  <div className="flex items-center gap-3 w-full md:w-auto">
-                    {/* Dark Mode Toggle */}
-                    <button onClick={() => setDarkMode(!darkMode)} className="p-3 rounded-xl bg-white dark:bg-slate-800 border dark:border-slate-700 shadow-sm transition-all hover:scale-110">
-                      {darkMode ? '☀️' : '🌙'}
-                    </button>
-                    <button onClick={() => setIsIotModalOpen(true)} className="flex-1 md:flex-none bg-slate-800 dark:bg-slate-700 text-teal-400 border border-teal-500/30 font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2">
-                      <Watch size={20} /> <span className="hidden sm:inline">Sync</span>
-                    </button>
-                    <button onClick={() => setIsModalOpen(true)} className="flex-1 md:flex-none bg-teal-500 hover:bg-teal-400 text-black font-bold py-3 px-6 rounded-xl flex items-center justify-center gap-2 shadow-lg shadow-teal-500/20">
-                      <Plus size={20} /> Log
-                    </button>
-                  </div>
+          {/* 💻 SCROLLABLE CONTENT AREA */}
+          {/* Added 'md:pl-64' only if Sidebar is 'fixed'. If Sidebar is part of Flex, remove md:pl-64 */}
+          <main className="flex-1 p-4 md:p-10 md:ml-64"> 
+            <div className="max-w-full lg:max-w-[1440px] mx-auto">
+              
+              {/* TOP HEADER SECTION */}
+              <div className="flex flex-col xl:flex-row justify-between items-start xl:items-center mb-8 gap-6">
+                <div>
+                  <h1 className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white tracking-tight">{getGreeting()}</h1>
+                  <p className="text-slate-500 dark:text-slate-400 mt-2 text-lg">Your Personal AI Tracker 🤖</p>
                 </div>
+                <div className="flex items-center gap-3 w-full xl:w-auto">
+                  <button onClick={() => setDarkMode(!darkMode)} className="p-4 rounded-2xl bg-white dark:bg-slate-900 border dark:border-slate-800 shadow-sm transition-all hover:scale-110">
+                    {darkMode ? '☀️' : '🌙'}
+                  </button>
+                  <button onClick={() => setIsIotModalOpen(true)} className="flex-1 md:flex-none bg-slate-900 dark:bg-slate-700 text-teal-400 border border-teal-500/30 font-bold py-4 px-6 rounded-2xl flex items-center justify-center gap-2">
+                    <Watch size={20} /> Sync
+                  </button>
+                  <button onClick={() => setIsModalOpen(true)} className="flex-1 md:flex-none bg-teal-500 hover:bg-teal-400 text-black font-black py-4 px-8 rounded-2xl flex items-center justify-center gap-2 shadow-xl shadow-teal-500/20">
+                    <Plus size={22} /> Log Activity
+                  </button>
+                </div>
+              </div>
 
                 <Routes>
                   {/* MAIN DASHBOARD */}
