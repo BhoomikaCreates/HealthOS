@@ -48,7 +48,7 @@ function App() {
 
   const fetchAIInsight = async () => {
     try {
-      const response = await fetch("http://localhost:5005/api/ai-insight");
+      const response = await fetch("https://healthos-6tad.onrender.com/api/login");
       const data = await response.json();
       setAiMessage(data.message); 
     } catch (error) {
