@@ -2,65 +2,56 @@ import React, { useState } from "react";
 import { Link, useLocation } from 'react-router-dom';
 import Chatbot from "./Chatbot/chatbot";
 
-const Sidebar = () => {
+// ✅ Props add kiye: isOpen aur toggleSidebar
+const Sidebar = ({ isOpen, toggleSidebar }) => {
   const location = useLocation();
   const [isChatOpen, setIsChatOpen] = useState(false);
   const isActive = (path) => location.pathname === path;
-  const activeStyle = "p-3 bg-teal-600 text-white rounded-lg cursor-pointer block transition-all font-bold shadow-lg shadow-teal-500/20";
-  const inactiveStyle = "p-3 hover:bg-slate-800 text-gray-300 rounded-lg cursor-pointer block transition-all";
+  
+  const activeStyle = "p-3 bg-teal-600 text-white rounded-xl cursor-pointer block transition-all font-bold shadow-lg shadow-teal-500/20";
+  const inactiveStyle = "p-3 hover:bg-slate-800 text-gray-400 rounded-xl cursor-pointer block transition-all";
 
   return (
-    // ✅ FIX 1: restored exact original width w-64, added flex flex-col for bottom button
-    <div className="w-64 h-screen bg-slate-900 text-white p-5 fixed left-0 top-0 border-r border-slate-800 z-40 flex flex-col">
-      <h1 className="text-2xl font-bold text-teal-400 mb-10 flex items-center gap-2">
-        🧘‍♀️ HealthOS
-      </h1>
-      
-      <nav className="space-y-4 flex-1">
-        <Link to="/" className={isActive('/') ? activeStyle : inactiveStyle}>
-          📊 Dashboard
-        </Link>
-        
-        <Link to="/workout" className={isActive('/workout') ? activeStyle : inactiveStyle}>
-          🏃‍♀️ Workout Tracker
-        </Link>
+    <>
+      {/* 🌫️ Mobile Overlay: Jab phone pe sidebar khule toh piche ka area dhundla ho jaye */}
+      {isOpen && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 md:hidden" onClick={toggleSidebar} />
+      )}
 
-        {/* ✅ FIX 2: Health Advisor nav link kept — clicking trigger below opens chat */}
-        <Link to="/chat" className={isActive('/chat') ? activeStyle : inactiveStyle}>
-          🤖 Health Advisor
-        </Link>
-
-        <Link to="/yoga" className={isActive('/yoga') ? activeStyle : inactiveStyle}>
-          🧘 Yoga & Meditation
-        </Link>
+      {/* ✅ Sidebar Drawer Logic */}
+      <div className={`fixed top-0 left-0 h-screen w-64 bg-slate-900 text-white p-5 border-r border-slate-800 z-50 flex flex-col transition-transform duration-300 
+        ${isOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0`}>
         
-        <Link to="/sleep" className={isActive('/sleep') ? activeStyle : inactiveStyle}>
-          😴 Sleep Schedule
-        </Link>
+        <h1 className="text-2xl font-bold text-teal-400 mb-10 flex items-center gap-2">
+          🧘‍♀️ HealthOS
+        </h1>
         
-        <Link to="/water" className={isActive('/water') ? activeStyle : inactiveStyle}>
-          💧 Water Intake
-        </Link>
-      </nav>
+        <nav className="space-y-3 flex-1 overflow-y-auto">
+          <Link to="/" onClick={toggleSidebar} className={isActive('/') ? activeStyle : inactiveStyle}>📊 Dashboard</Link>
+          <Link to="/workout" onClick={toggleSidebar} className={isActive('/workout') ? activeStyle : inactiveStyle}>🏃‍♀️ Workout Tracker</Link>
+          <Link to="/chat" onClick={toggleSidebar} className={isActive('/chat') ? activeStyle : inactiveStyle}>🤖 Health Advisor</Link>
+          <Link to="/yoga" onClick={toggleSidebar} className={isActive('/yoga') ? activeStyle : inactiveStyle}>🧘 Yoga & Meditation</Link>
+          <Link to="/sleep" onClick={toggleSidebar} className={isActive('/sleep') ? activeStyle : inactiveStyle}>😴 Sleep Schedule</Link>
+          <Link to="/water" onClick={toggleSidebar} className={isActive('/water') ? activeStyle : inactiveStyle}>💧 Water Intake</Link>
+        </nav>
 
-      {/* ✅ FIX 2: Trigger only toggles chatbot popup, does NOT navigate */}
-      <div
-        onClick={() => setIsChatOpen(prev => !prev)}
-        className="mt-4 p-4 bg-gradient-to-r from-teal-600 to-teal-500 rounded-2xl cursor-pointer hover:from-teal-500 hover:to-teal-400 transition-all shadow-lg shadow-teal-500/30"
-      >
-        <div className="flex items-center gap-3">
-          <span className="text-2xl">🤖</span>
-          <div>
-            <p className="text-sm font-bold text-white">AI Health Agent</p>
-            <p className="text-xs text-teal-100">Ask anything...</p>
+        <div
+          onClick={() => setIsChatOpen(prev => !prev)}
+          className="mt-4 p-4 bg-gradient-to-r from-teal-600 to-teal-500 rounded-2xl cursor-pointer hover:from-teal-500 hover:to-teal-400 transition-all shadow-lg shadow-teal-500/30 shrink-0"
+        >
+          <div className="flex items-center gap-3">
+            <span className="text-2xl">🤖</span>
+            <div>
+              <p className="text-sm font-bold text-white">AI Agent</p>
+              <p className="text-xs text-teal-100 italic">Ask Guru...</p>
+            </div>
+            <span className="ml-auto text-white">{isChatOpen ? '✕' : '↑'}</span>
           </div>
-          <span className="ml-auto text-white text-lg">{isChatOpen ? '✕' : '↑'}</span>
         </div>
-      </div>
 
-      {/* ✅ FIX 3: isChatOpen passed correctly — close button in Chatbot will call setIsOpen(false) */}
-      <Chatbot isOpen={isChatOpen} setIsOpen={setIsChatOpen} />
-    </div>
+        <Chatbot isOpen={isChatOpen} setIsOpen={setIsChatOpen} />
+      </div>
+    </>
   );
 };
 

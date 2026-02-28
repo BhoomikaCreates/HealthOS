@@ -96,53 +96,53 @@ function App() {
     {!isAuthenticated ? (
       <Auth onLoginSuccess={() => setIsAuthenticated(true)} />
     ) : (
-      <div className="min-h-screen bg-white dark:bg-slate-900 text-slate-900 dark:text-white transition-colors duration-300">
-      <Sidebar />
-      {/* 📱 MOBILE NAVBAR & 💻 TOP HEADER */}
-      <nav className="fixed top-0 left-0 right-0 h-16 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 z-50 flex items-center justify-between px-4 md:hidden">
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-8 bg-teal-500 rounded-lg flex items-center justify-center text-black font-bold text-xs">H+</div>
-          <span className="font-bold text-lg dark:text-white">HealthOS</span>
-        </div>
-  
-        <div className="flex items-center gap-3">
-          {/* THEME TOGGLE BUTTON */}
-          <button 
-            onClick={() => setDarkMode(!darkMode)}
-            className="p-2 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-yellow-400 transition-all"
-          >
-            {darkMode ? '☀️' : '🌙'}
-          </button>
-    
-          <button onClick={() => setIsProfileOpen(true)} className="w-8 h-8 rounded-full border border-teal-500 overflow-hidden">
-            <img src={`https://api.dicebear.com/9.x/micah/svg?seed=${avatarSeed}`} alt="Profile" />
-          </button>
-        </div>
-      </nav>
-      <div className="md:ml-64 p-4 md:p-8 w-full min-h-screen pt-20 md:pt-8 transition-all duration-300">
-        <div className="flex justify-between items-center mb-6">
-          <div>
-            <h1 className="text-4xl font-bold">{getGreeting()}</h1>
-            <p className="text-gray-400 mt-2">Your Personal AI Tracker 🤖</p>
+      <div className={`min-h-screen ${darkMode ? 'dark' : ''}`}>
+        {/* 1. Sidebar (Laptop pe fixed rahega, mobile pe tumhare logic ke hisaab se) */}
+        <Sidebar />
+
+        {/* 2. 📱 MOBILE NAVBAR (Sirf Mobile pe dikhega) */}
+        <nav className="fixed top-0 left-0 right-0 h-16 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 z-50 flex items-center justify-between px-4 md:hidden">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 bg-teal-500 rounded-lg flex items-center justify-center text-black font-bold text-xs">H+</div>
+            <span className="font-bold text-lg dark:text-white">HealthOS</span>
           </div>
-          <div className="flex items-center gap-4">
-            <button 
-              onClick={() => setDarkMode(!darkMode)}
-              className="hidden md:flex p-3 rounded-full bg-slate-100 dark:bg-slate-800 hover:ring-2 ring-teal-400 transition-all"
-            >
+          <div className="flex items-center gap-3">
+            <button onClick={() => setDarkMode(!darkMode)} className="p-2 rounded-full bg-slate-100 dark:bg-slate-800 text-yellow-500">
               {darkMode ? '☀️' : '🌙'}
             </button>
-            <button onClick={() => setIsIotModalOpen(true)} className="bg-slate-800 hover:bg-slate-700 text-teal-400 border border-teal-500/30 font-bold py-3 px-4 rounded-full flex items-center gap-2 transition-all">
-              <Watch size={20} /> <span className="hidden sm:inline">Sync Device</span>
-            </button>
-            <button onClick={() => setIsModalOpen(true)} className="bg-teal-500 hover:bg-teal-400 text-black font-bold py-3 px-6 rounded-full flex items-center gap-2 shadow-lg shadow-teal-500/20">
-              <Plus size={20} /> Log Activity
-            </button>
-            <button onClick={() => setIsProfileOpen(true)} className="w-12 h-12 rounded-full border-2 border-teal-500/50 hover:border-teal-400 hover:scale-105 overflow-hidden transition-all shadow-lg shadow-teal-500/20 p-0.5 bg-slate-800">
-              <img src={`https://api.dicebear.com/9.x/micah/svg?seed=${avatarSeed}`} alt="Profile" className="w-full h-full rounded-full bg-teal-500/10" />            
+            <button onClick={() => setIsProfileOpen(true)} className="w-8 h-8 rounded-full border border-teal-500 overflow-hidden">
+              <img src={`https://api.dicebear.com/9.x/micah/svg?seed=${avatarSeed}`} alt="Profile" />
             </button>
           </div>
-        </div>
+        </nav>
+
+        {/* 3. MAIN CONTENT WRAPPER (Laptop pe margin-left: 64, mobile pe full width) */}
+        <div className="md:ml-64 w-full min-h-screen pt-20 md:pt-8 px-4 md:px-8 bg-slate-50 dark:bg-slate-950 transition-all duration-300">
+          
+          <div className="max-w-[1400px] mx-auto">
+            {/* Header with Greeting & Desktop Toggle */}
+            <div className="flex justify-between items-center mb-8">
+              <div>
+                <h1 className="text-3xl md:text-4xl font-bold dark:text-white">{getGreeting()}</h1>
+                <p className="text-gray-400 mt-2">Your Personal AI Tracker 🤖</p>
+              </div>
+              
+              {/* Desktop Only Buttons */}
+              <div className="hidden md:flex items-center gap-4">
+                <button 
+                  onClick={() => setDarkMode(!darkMode)}
+                  className="p-3 rounded-full bg-slate-100 dark:bg-slate-800 hover:ring-2 ring-teal-400 transition-all"
+                >
+                  {darkMode ? '☀️' : '🌙'}
+                </button>
+                <button onClick={() => setIsIotModalOpen(true)} className="bg-slate-800 text-teal-400 border border-teal-500/30 font-bold py-3 px-4 rounded-full flex items-center gap-2">
+                  <Watch size={20} /> Sync Device
+                </button>
+                <button onClick={() => setIsModalOpen(true)} className="bg-teal-500 text-black font-bold py-3 px-6 rounded-full flex items-center gap-2 shadow-lg">
+                  <Plus size={20} /> Log Activity
+                </button>
+              </div>
+            </div>
 
         {/* 👇 YAHAN SE ROUTES SHURU 👇 */}
         <Routes>
