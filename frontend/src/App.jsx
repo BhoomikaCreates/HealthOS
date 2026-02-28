@@ -29,7 +29,7 @@ function App() {
 
   const fetchHealthData = async () => {
     try {
-      const response = await fetch("http://localhost:5005/api/health-data");
+      const response = await fetch("https://healthos-6tad.onrender.com");
       if (!response.ok) throw new Error();
       const data = await response.json();
       if (data.length > 0) {
