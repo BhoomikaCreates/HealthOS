@@ -5,7 +5,7 @@ import Auth from "./components/Auth";
 import React, { useEffect, useState } from "react";
 import Sidebar from "./components/Sidebar";
 import Lottie from "lottie-react";
-import robotAnimation from "./assets/robot.json"; 
+import robotAnimation from "./assets/Robot.json"; 
 import { Droplets, Moon, Footprints, Flame, Plus, X, Sparkles, Target, Trophy, Zap, Watch, Share2 } from "lucide-react";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import WorkoutTracker from "./components/WorkoutTracker/WorkoutTracker";
