@@ -13,7 +13,7 @@ const Auth = ({ onLoginSuccess }) => {
     setLoading(true);
 
     const endpoint = isLogin ? '/api/auth/login' : '/api/auth/register';
-    const url = `https://healthos-6tad.onrender.com/api/auth/login${endpoint}`;
+    const url = `https://healthos-6tad.onrender.com${endpoint}`;
 
     try {
       const response = await fetch(url, {
