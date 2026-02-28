@@ -61,7 +61,7 @@ function App() {
   const handleLogData = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:5005/api/health-data", {
+      const response = await fetch("https://healthos-6tad.onrender.com/api/health-data", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ water: parseFloat(formData.water), sleep: parseFloat(formData.sleep), steps: parseInt(formData.steps), calories: parseInt(formData.calories) })
