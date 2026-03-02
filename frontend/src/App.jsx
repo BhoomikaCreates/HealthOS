@@ -11,6 +11,7 @@ import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 import WorkoutTracker from "./components/WorkoutTracker/WorkoutTracker";
 import { Routes, Route } from 'react-router-dom';
 import WaterIntake from './components/WaterIntake';
+import YogaMeditation from './components/YogaMeditation';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem('token'));
@@ -147,11 +148,21 @@ function App() {
                     {darkMode ? '☀️' : '🌙'}
                   </button>
                   <button onClick={() => setIsIotModalOpen(true)} className="flex-1 md:flex-none bg-slate-900 dark:bg-slate-700 text-teal-400 border border-teal-500/30 font-bold py-4 px-6 rounded-2xl flex items-center justify-center gap-2">
-                    <Watch size={20} /> Sync
+                    <Watch size={20} /> Sync Device
                   </button>
                   <button onClick={() => setIsModalOpen(true)} className="flex-1 md:flex-none bg-teal-500 hover:bg-teal-400 text-black font-black py-4 px-8 rounded-2xl flex items-center justify-center gap-2 shadow-xl shadow-teal-500/20">
                     <Plus size={22} /> Log Activity
                   </button>
+                  <button 
+                  onClick={() => setIsProfileOpen(true)} 
+                  className="w-12 h-12 rounded-full border-2 border-teal-500/50 hover:border-teal-400 hover:scale-105 overflow-hidden transition-all shadow-lg p-0.5 bg-slate-800"
+                >
+                  <img 
+                    src={`https://api.dicebear.com/9.x/micah/svg?seed=${avatarSeed}`} 
+                    alt="Profile" 
+                    className="w-full h-full rounded-full bg-teal-500/10" 
+                  />
+                </button>
                 </div>
               </div>
 
@@ -216,7 +227,7 @@ function App() {
                         <div className="flex justify-between items-center mb-6">
                           <h2 className="text-xl font-bold text-slate-800 dark:text-white flex items-center gap-2">Achievements <Trophy className="text-yellow-400" size={22} /></h2>
                           <button onClick={() => setIsShareModalOpen(true)} className="bg-emerald-500 text-black text-sm font-bold px-4 py-2 rounded-full flex items-center gap-2">
-                             <Share2 size={16} /> Share
+                             <Share2 size={16} /> Share Progress
                           </button>
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -237,6 +248,7 @@ function App() {
 
                   <Route path="/water" element={<WaterIntake />} />
                   <Route path="/workout" element={<WorkoutTracker />} />
+                  <Route path="/yoga" element={<YogaMeditation />} />
                   <Route path="/chat" element={<div className="flex flex-col items-center justify-center h-96"><h1 className="text-5xl font-bold text-teal-400 mb-4 text-center px-4">🤖 Health Advisor</h1><p className="text-slate-400">Under Construction by Partner...</p></div>} />
                   {/* ... Baki routes ... */}
                 </Routes>
