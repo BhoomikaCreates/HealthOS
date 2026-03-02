@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Play, Pause, RotateCcw, Wind, Headphones, Music, Sparkles } from 'lucide-react';
 import Lottie from "lottie-react";
-import zenAnimation from "../assets/zen.json"; 
+import zenAnimation from "../assets/zenanime.json"; 
 
 const YogaMeditation = () => {
   const [isActive, setIsActive] = useState(false);
