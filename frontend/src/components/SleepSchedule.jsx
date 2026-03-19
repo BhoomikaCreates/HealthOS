@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Moon, Sun, Clock, Star, CheckCircle, BedDouble, Info, Headphones, Music, BookOpen, PlayCircle } from 'lucide-react';
+import { Moon, Sun, Clock, Star, CheckCircle, BedDouble, Info, Headphones, Music, Circle, BookOpen, PlayCircle } from 'lucide-react';
 
 const SleepSchedule = () => {
   const [wakeUpTime, setWakeUpTime] = useState('07:00');
@@ -148,8 +148,13 @@ const SleepSchedule = () => {
                   onClick={() => toggleRoutine(item.id)}
                   className={`flex items-center gap-4 p-4 rounded-2xl border cursor-pointer transition-all ${item.done ? 'bg-blue-50 dark:bg-blue-500/10 border-blue-200 dark:border-blue-500/30' : 'bg-slate-50 dark:bg-slate-800/50 border-transparent hover:border-slate-200 dark:hover:border-slate-700'}`}
                 >
-                  <div className={`${item.done ? 'text-blue-500' : 'text-slate-300 dark:text-slate-600'}`}>
-                    <CheckCircle fill={item.done ? 'currentColor' : 'none'} className={item.done ? 'text-white dark:text-slate-900' : ''} size={24} />
+                  <div className={`${item.done ? 'text-blue-500' : 'text-slate-400 dark:text-slate-500'}`}>
+                    
+                    {item.done ? (
+                      <CheckCircle fill="currentColor" className="text-white dark:text-slate-900" size={24} />
+                    ) : (
+                      <Circle size={24} />
+                    )}
                   </div>
                   <span className={`font-bold transition-all ${item.done ? 'text-blue-700 dark:text-blue-400 line-through opacity-70' : 'text-slate-700 dark:text-slate-300'}`}>
                     {item.task}

@@ -250,7 +250,8 @@ function App() {
 
                   <Route path="/water" element={<WaterIntake />} />
                   <Route path="/workout" element={<WorkoutTracker />} />
-                  <Route path="/advisor" element={<HealthAdvisor />} />
+
+                  <Route path="/chat" element={<HealthAdvisor />} /> 
                   <Route path="/yoga" element={<YogaMeditation />} />
                   <Route path="/sleep" element={<SleepSchedule />} />                  
                 </Routes>
