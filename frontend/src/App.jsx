@@ -13,6 +13,7 @@ import { Routes, Route } from 'react-router-dom';
 import WaterIntake from './components/WaterIntake';
 import YogaMeditation from './components/YogaMeditation';
 import SleepSchedule from './components/SleepSchedule';
+import HealthAdvisor from './components/HealthAdvisor';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem('token'));
@@ -249,6 +250,7 @@ function App() {
 
                   <Route path="/water" element={<WaterIntake />} />
                   <Route path="/workout" element={<WorkoutTracker />} />
+                  <Route path="/advisor" element={<HealthAdvisor />} />
                   <Route path="/yoga" element={<YogaMeditation />} />
                   <Route path="/sleep" element={<SleepSchedule />} />
                   <Route path="/chat" element={<div className="flex flex-col items-center justify-center h-96"><h1 className="text-5xl font-bold text-teal-400 mb-4 text-center px-4">🤖 Health Advisor</h1><p className="text-slate-400">Under Construction by Partner...</p></div>} />
