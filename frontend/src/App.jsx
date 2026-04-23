@@ -110,63 +110,68 @@ function App() {
   };
 
   return (
-  <div className={`min-h-screen w-full transition-colors duration-300 ${darkMode ? 'dark bg-slate-950' : 'bg-slate-50'}`}>
-    {!isAuthenticated ? (
-      <Auth onLoginSuccess={() => setIsAuthenticated(true)} />
-    ) : (
-      <div className="flex min-h-screen relative overflow-x-hidden">
-        
-        {/* 1. SIDEBAR: Fixed on Laptop, Drawer on Mobile */}
-        <Sidebar isOpen={isSidebarOpen} toggleSidebar={() => setIsSidebarOpen(false)} />
-
-        {/* 2. MAIN CONTENT WRAPPER */}
-        {/* 'flex-1' ensures it takes the remaining space next to sidebar on laptop */}
-        <div className="flex-1 flex flex-col min-w-0 transition-all duration-300">
+    <div className={`min-h-screen w-full transition-colors duration-500 ${darkMode ? 'dark bg-slate-950 text-white' : 'bg-gradient-to-br from-slate-50 via-slate-100 to-cyan-100 text-slate-900'}`}>
+      {!isAuthenticated ? (
+        <Auth onLoginSuccess={() => setIsAuthenticated(true)} />
+      ) : (
+        <div className="flex min-h-screen relative overflow-x-hidden">
           
-          {/* 📱 MOBILE HEADER (Hidden on Laptop) */}
-          <header className="md:hidden flex items-center justify-between px-4 h-16 bg-white dark:bg-slate-900 border-b dark:border-slate-800 sticky top-0 z-40">
-            <button onClick={() => setIsSidebarOpen(true)} className="p-2 text-slate-600 dark:text-slate-300">
-              <Menu size={24} />
-            </button>
-            <span className="font-bold text-slate-800 dark:text-white">HealthOS</span>
-            <button onClick={() => setIsProfileOpen(true)} className="w-8 h-8 rounded-full border border-teal-500 overflow-hidden">
-              <img src={`https://api.dicebear.com/9.x/micah/svg?seed=${avatarSeed}`} alt="Profile" />
-            </button>
-          </header>
+          {/* 1. SIDEBAR: Fixed on Laptop, Drawer on Mobile */}
+          <Sidebar isOpen={isSidebarOpen} toggleSidebar={() => setIsSidebarOpen(false)} />
 
-          {/* 💻 SCROLLABLE CONTENT AREA */}
-          {/* Added 'md:pl-64' only if Sidebar is 'fixed'. If Sidebar is part of Flex, remove md:pl-64 */}
-          <main className="flex-1 p-4 md:p-10 md:ml-64"> 
-            <div className="max-w-full lg:max-w-[1440px] mx-auto">
-              
-              {/* TOP HEADER SECTION */}
-              <div className="flex flex-col xl:flex-row justify-between items-start xl:items-center mb-8 gap-6">
-                <div>
-                  <h1 className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white tracking-tight">{getGreeting()}</h1>
-                  <p className="text-slate-500 dark:text-slate-400 mt-2 text-lg">Your Personal AI Tracker 🤖</p>
+          {/* 2. MAIN CONTENT WRAPPER */}
+          {/* 'flex-1' ensures it takes the remaining space next to sidebar on laptop */}
+          <div className="flex-1 flex flex-col min-w-0 transition-all duration-300">
+            
+            {/* 📱 MOBILE HEADER (Hidden on Laptop) */}
+            <header className="md:hidden flex items-center justify-between px-4 h-16 bg-white dark:bg-slate-900 border-b dark:border-slate-800 sticky top-0 z-40">
+              <button onClick={() => setIsSidebarOpen(true)} className="p-2 text-slate-600 dark:text-slate-300">
+                <Menu size={24} />
+              </button>
+              <span className="font-bold text-slate-800 dark:text-white">HealthOS</span>
+              <button onClick={() => setIsProfileOpen(true)} className="w-8 h-8 rounded-full border border-teal-500 overflow-hidden">
+                <img src={`https://api.dicebear.com/9.x/micah/svg?seed=${avatarSeed}`} alt="Profile" />
+              </button>
+            </header>
+
+            {/* 💻 SCROLLABLE CONTENT AREA */}
+            {/* Added 'md:pl-64' only if Sidebar is 'fixed'. If Sidebar is part of Flex, remove md:pl-64 */}
+            <main className="flex-1 p-4 md:p-10 md:ml-64">
+              <div className="relative max-w-full lg:max-w-[1440px] mx-auto">
+                <div className="pointer-events-none absolute inset-x-0 top-0 h-[28rem] overflow-hidden">
+                  <div className="absolute left-1/2 top-[-6rem] w-72 h-72 rounded-full bg-cyan-500/15 blur-3xl -translate-x-1/2"></div>
+                  <div className="absolute right-0 top-24 w-80 h-80 rounded-full bg-fuchsia-500/10 blur-3xl"></div>
                 </div>
-                <div className="flex items-center gap-3 w-full xl:w-auto">
-                  <button onClick={() => setDarkMode(!darkMode)} className="p-4 rounded-2xl bg-white dark:bg-slate-900 border dark:border-slate-800 shadow-sm transition-all hover:scale-110">
-                    {darkMode ? '☀️' : '🌙'}
-                  </button>
-                  <button onClick={() => setIsIotModalOpen(true)} className="flex-1 md:flex-none bg-slate-900 dark:bg-slate-700 text-teal-400 border border-teal-500/30 font-bold py-4 px-6 rounded-2xl flex items-center justify-center gap-2">
-                    <Watch size={20} /> Sync Device
-                  </button>
-                  <button onClick={() => setIsModalOpen(true)} className="flex-1 md:flex-none bg-teal-500 hover:bg-teal-400 text-black font-black py-4 px-8 rounded-2xl flex items-center justify-center gap-2 shadow-xl shadow-teal-500/20">
-                    <Plus size={22} /> Log Activity
-                  </button>
-                  <button 
-                  onClick={() => setIsProfileOpen(true)} 
-                  className="w-12 h-12 rounded-full border-2 border-teal-500/50 hover:border-teal-400 hover:scale-105 overflow-hidden transition-all shadow-lg p-0.5 bg-slate-800"
-                >
-                  <img 
-                    src={`https://api.dicebear.com/9.x/micah/svg?seed=${avatarSeed}`} 
-                    alt="Profile" 
-                    className="w-full h-full rounded-full bg-teal-500/10" 
-                  />
-                </button>
+                <div className="flex flex-col xl:flex-row justify-between items-start xl:items-center mb-8 gap-6 relative">
+                  <div className="max-w-3xl">
+                    <h1 className="text-3xl md:text-5xl font-black tracking-tight text-slate-900 dark:text-white">
+                      {getGreeting()}
+                    </h1>
+                    <p className="mt-3 text-slate-500 dark:text-slate-400 text-lg">
+                      Your Personal AI Wellness Dashboard with premium insights.
+                    </p>
+                  </div>
+                  <div className="flex flex-col sm:flex-row gap-3 w-full xl:w-auto">
+                    <button
+                      onClick={() => setDarkMode(!darkMode)}
+                      className="rounded-3xl px-5 py-4 bg-white/90 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-700 shadow-lg shadow-slate-900/10 dark:shadow-none hover:-translate-y-0.5 transition-all"
+                    >
+                      {darkMode ? '☀️ Light' : '🌙 Dark'}
+                    </button>
+                    <button
+                      onClick={() => setIsIotModalOpen(true)}
+                      className="rounded-3xl px-5 py-4 bg-gradient-to-r from-cyan-400 to-teal-500 text-slate-900 font-semibold shadow-xl shadow-cyan-500/20 hover:brightness-105 transition-all"
+                    >
+                      <Watch size={18} className="inline-block mr-2" /> Sync Device
+                    </button>
+                    <button
+                      onClick={() => setIsModalOpen(true)}
+                      className="rounded-3xl px-6 py-4 bg-gradient-to-r from-teal-500 to-emerald-400 text-slate-950 font-black shadow-2xl shadow-emerald-400/20 hover:scale-[1.02] transition-all"
+                    >
+                      <Plus size={20} className="inline-block mr-2" /> Log Activity
+                    </button>
+                  </div>
                 </div>
-              </div>
 
                 <Routes>
                   {/* MAIN DASHBOARD */}
@@ -188,15 +193,15 @@ function App() {
                       {/* METRICS GRID */}
                       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                         {[
-                          { label: "Water", val: stats.water, icon: Droplets, color: "text-blue-400", bg: "bg-blue-500/5", border: "border-blue-500/20" },
-                          { label: "Sleep", val: stats.sleep, icon: Moon, color: "text-purple-400", bg: "bg-purple-500/5", border: "border-purple-500/20" },
-                          { label: "Steps", val: stats.steps, icon: Footprints, color: "text-green-400", bg: "bg-green-500/5", border: "border-green-500/20" },
-                          { label: "Calories", val: stats.calories, icon: Flame, color: "text-orange-400", bg: "bg-orange-500/5", border: "border-orange-500/20" }
+                          { label: "Water", val: stats.water, icon: Droplets, color: "text-blue-500", bg: "bg-blue-500/10", border: "border-blue-500/15" },
+                          { label: "Sleep", val: stats.sleep, icon: Moon, color: "text-violet-500", bg: "bg-violet-500/10", border: "border-violet-500/15" },
+                          { label: "Steps", val: stats.steps, icon: Footprints, color: "text-emerald-500", bg: "bg-emerald-500/10", border: "border-emerald-500/15" },
+                          { label: "Calories", val: stats.calories, icon: Flame, color: "text-orange-500", bg: "bg-orange-500/10", border: "border-orange-500/15" }
                         ].map((item, i) => (
-                          <div key={i} className={`bg-white dark:bg-slate-900 p-6 rounded-[2rem] border ${item.border} shadow-sm hover:shadow-md transition-all`}>
-                            <div className="flex justify-between items-center mb-4 text-slate-400">
+                          <div key={i} className={`bg-white/85 dark:bg-slate-900/80 border ${item.border} backdrop-blur-xl p-6 rounded-[2rem] shadow-[0_32px_90px_-40px_rgba(15,23,42,0.24)] hover:shadow-[0_40px_110px_-40px_rgba(15,23,42,0.28)] transition-all`}>
+                            <div className="flex justify-between items-center mb-4 text-slate-500">
                               <span className="text-xs font-bold uppercase tracking-widest">{item.label}</span>
-                              <item.icon className={item.color} size={20} />
+                              <item.icon className={item.color} size={22} />
                             </div>
                             <p className={`text-3xl font-black ${item.color}`}>{item.val}</p>
                           </div>
@@ -204,8 +209,8 @@ function App() {
                       </div>
 
                       {/* CHART */}
-                      <div className="mt-10 bg-white dark:bg-slate-900 p-6 rounded-[2rem] border dark:border-slate-800 shadow-sm">
-                        <h2 className="text-xl font-bold text-slate-800 dark:text-white mb-6">Weekly Progress Overview 📈</h2>
+                      <div className="mt-10 bg-white/85 dark:bg-slate-900/80 border border-slate-200/70 dark:border-slate-700/80 p-6 rounded-[2.5rem] shadow-[0_30px_80px_-30px_rgba(15,23,42,0.3)]">
+                        <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-6">Weekly Progress Overview 📈</h2>
                         <div className="h-72 w-full">
                           <ResponsiveContainer width="100%" height="100%">
                             <AreaChart data={weeklyData}>
@@ -226,9 +231,9 @@ function App() {
 
                       {/* ACHIEVEMENTS */}
                       <div className="mt-10 mb-10">
-                        <div className="flex justify-between items-center mb-6">
-                          <h2 className="text-xl font-bold text-slate-800 dark:text-white flex items-center gap-2">Achievements <Trophy className="text-yellow-400" size={22} /></h2>
-                          <button onClick={() => setIsShareModalOpen(true)} className="bg-emerald-500 text-black text-sm font-bold px-4 py-2 rounded-full flex items-center gap-2">
+                        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+                          <h2 className="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">Achievements <Trophy className="text-amber-400" size={22} /></h2>
+                          <button className="rounded-full bg-emerald-500/95 text-slate-950 text-sm font-semibold px-5 py-3 shadow-lg shadow-emerald-500/25 hover:brightness-110 transition-all">
                              <Share2 size={16} /> Share Progress
                           </button>
                         </div>
@@ -238,9 +243,14 @@ function App() {
                             { title: "Power User", desc: "All metrics logged.", icon: Zap, color: "text-blue-400" },
                             { title: "Goal Crusher", desc: "Target reached!", icon: Target, color: "text-teal-400" }
                           ].map((badge, idx) => (
-                            <div key={idx} className="bg-white dark:bg-slate-900/50 border dark:border-slate-800 p-5 rounded-3xl flex items-center gap-4">
-                              <div className="bg-slate-100 dark:bg-slate-800 p-3 rounded-2xl"><badge.icon className={badge.color} size={28} /></div>
-                              <div><h3 className="font-bold dark:text-white">{badge.title}</h3><p className="text-slate-500 text-sm">{badge.desc}</p></div>
+                            <div key={idx} className="bg-white/85 dark:bg-slate-900/80 border border-slate-200/70 dark:border-slate-700/80 p-6 rounded-[2rem] shadow-[0_22px_50px_-18px_rgba(15,23,42,0.25)] transition-all hover:-translate-y-0.5">
+                              <div className="bg-slate-100 dark:bg-slate-800 p-4 rounded-3xl">
+                                <badge.icon className={badge.color} size={28} />
+                              </div>
+                              <div className="mt-4">
+                                <h3 className="font-bold dark:text-white">{badge.title}</h3>
+                                <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">{badge.desc}</p>
+                              </div>
                             </div>
                           ))}
                         </div>
