@@ -40,7 +40,7 @@ const Chatbot = ({ isOpen, setIsOpen }) => {
     setIsTyping(true);
 
     try {
-      const res = await fetch('http://localhost:5005/api/chat', {
+      const res = await fetch('hhttps://health-os-mu.vercel.app/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: msgText })

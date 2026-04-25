@@ -21,7 +21,7 @@ const PORT = process.env.PORT || 5000;
 
 // Middlewares to parse JSON and allow cross-origin requests
 app.use(cors({
-  origin: ["https://health-os-mu.vercel.app", "http://localhost:5173"], // Vercel aur local dono allow kar diye!
+  origin: '*', //["https://health-os-mu.vercel.app", "http://localhost:5173"], // Vercel aur local dono allow kar diye!
   credentials: true
 }));
 app.use(express.json());
