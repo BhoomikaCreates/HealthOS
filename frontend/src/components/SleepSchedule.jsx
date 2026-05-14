@@ -130,25 +130,29 @@ const SleepSchedule = () => {
             </h3>
 
             <div className="space-y-3">
-              {routine.map(item => (
-                <div
-                  key={item.id}
-                  onClick={() => toggleRoutine(item.id)}
-                  className={`flex items-center gap-4 p-4 rounded-3xl border cursor-pointer transition-all ${item.done ? 'bg-cyan-500/10 border-cyan-400/20' : 'bg-slate-900/80 border-slate-800 hover:border-slate-700'}`}
-                >
-                  <div className={`${item.done ? 'text-cyan-400' : 'text-slate-500'}`}>
-                    {item.done ? (
-                      <CheckCircle fill="currentColor" className="text-white" size={24} />
-                    ) : (
-                      <Circle size={24} />
-                    )}
-                  </div>
-                  <span className={`font-bold transition-all ${item.done ? 'text-cyan-200 line-through opacity-80' : 'text-slate-200'}`}>
-                    {item.task}
-                  </span>
-                </div>
-              ))}
-            </div>
+  {routine.map(item => (
+    <div
+      key={item.id}
+      onClick={() => toggleRoutine(item.id)}
+      className={`flex items-center gap-4 p-4 rounded-3xl border cursor-pointer transition-all ${item.done ? 'bg-cyan-900/20 border-cyan-800/30' : 'bg-slate-900/50 border-slate-700/50'}`}
+    >
+      {/* 1. Icon Section */}
+      <div className={`${item.done ? 'text-cyan-400' : 'text-slate-500'}`}>
+        {item.done ? (
+          <CheckCircle className="text-cyan-400" size={24} /> 
+        ) : (
+          <Circle size={24} />
+        )}
+      </div>
+
+      {/* 2. Text Section (Yeh wapas add karna zaroori tha!) */}
+      <span className={`font-bold transition-all ${item.done ? 'text-cyan-200 line-through opacity-80' : 'text-slate-200'}`}>
+        {item.task}
+      </span>
+      
+    </div>
+  ))}
+</div>
           </div>
         </div>
       </div>

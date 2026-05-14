@@ -42,7 +42,7 @@ function App() {
     }
   }, [darkMode]);
 
-  const fetchHealthData = async () => {
+const fetchHealthData = async () => {
     try {
       const response = await fetch("https://healthos-6tad.onrender.com/api/health-data");
       if (!response.ok) throw new Error();
@@ -53,11 +53,25 @@ function App() {
           water: `${latest.water} Liters`, sleep: `${latest.sleep} Hours`,
           steps: latest.steps.toLocaleString(), calories: `${latest.calories} Kcal`
         });
-        setWeeklyData(data.reverse().map((item, index) => ({ name: `Day ${index + 1}`, water: item.water, sleep: item.sleep })));
+        // Added steps and calories here for the graph!
+        setWeeklyData(data.reverse().map((item, index) => ({ 
+          name: `Day ${index + 1}`, 
+          water: item.water, 
+          sleep: item.sleep,
+          steps: item.steps,
+          calories: item.calories
+        })));
       }
     } catch (error) {
       setStats({ water: "2.8 Liters", sleep: "6.5 Hours", steps: "8,432", calories: "2,150 Kcal" });
-      setWeeklyData([{ name: 'Mon', water: 2.1, sleep: 6 }, { name: 'Tue', water: 2.5, sleep: 7 }, { name: 'Wed', water: 1.8, sleep: 5.5 }, { name: 'Thu', water: 3.0, sleep: 8 }, { name: 'Fri', water: 2.8, sleep: 6.5 }]);
+      // Added dummy steps and calories for fallback data so graph doesn't break
+      setWeeklyData([
+        { name: 'Mon', water: 2.1, sleep: 6, steps: 4000, calories: 1200 }, 
+        { name: 'Tue', water: 2.5, sleep: 7, steps: 6000, calories: 1500 }, 
+        { name: 'Wed', water: 1.8, sleep: 5.5, steps: 3000, calories: 1000 }, 
+        { name: 'Thu', water: 3.0, sleep: 8, steps: 8000, calories: 2000 }, 
+        { name: 'Fri', water: 2.8, sleep: 6.5, steps: 8432, calories: 2150 }
+      ]);
     }
   };
 
@@ -162,6 +176,20 @@ function App() {
                       <Plus size={20} className="inline-block mr-2" /> Log Activity
                     </button>
                   </div>
+                  <div 
+                      onClick={() => setIsProfileOpen(true)} 
+                      className="hidden md:flex items-center gap-3 ml-2 lg:ml-6 border-l border-slate-700/50 pl-4 lg:pl-6 cursor-pointer hover:opacity-80 transition-opacity"
+                    >
+                      <div className="text-right hidden lg:block">
+                        <p className="text-sm font-bold text-slate-50">{userName}</p>
+                        <p className="text-xs text-cyan-400 font-semibold">Pro Member</p>
+                      </div>
+                      <img 
+                        src={`https://api.dicebear.com/9.x/micah/svg?seed=${avatarSeed}`} 
+                        alt="Profile" 
+                        className="w-12 h-12 rounded-full border-2 border-cyan-500/50 bg-slate-900 shadow-lg shadow-cyan-500/20"
+                      />
+                    </div>
                 </div>
 
                 <Routes>
@@ -203,7 +231,7 @@ function App() {
                         <h2 className="text-xl font-bold text-slate-50 mb-6">Weekly Progress Overview 📈</h2>
                         <div className="h-72 w-full">
                           <ResponsiveContainer width="100%" height="100%">
-                            <AreaChart data={weeklyData}>
+<AreaChart data={weeklyData}>
                               <defs>
                                 <linearGradient id="colorWater" x1="0" y1="0" x2="0" y2="1">
                                   <stop offset="5%" stopColor="#38bdf8" stopOpacity={0.45}/>
@@ -213,13 +241,33 @@ function App() {
                                   <stop offset="5%" stopColor="#a855f7" stopOpacity={0.45}/>
                                   <stop offset="95%" stopColor="#a855f7" stopOpacity={0}/>
                                 </linearGradient>
+                                {/* Added Gradients for Steps and Calories */}
+                                <linearGradient id="colorSteps" x1="0" y1="0" x2="0" y2="1">
+                                  <stop offset="5%" stopColor="#34d399" stopOpacity={0.45}/>
+                                  <stop offset="95%" stopColor="#34d399" stopOpacity={0}/>
+                                </linearGradient>
+                                <linearGradient id="colorCalories" x1="0" y1="0" x2="0" y2="1">
+                                  <stop offset="5%" stopColor="#fb923c" stopOpacity={0.45}/>
+                                  <stop offset="95%" stopColor="#fb923c" stopOpacity={0}/>
+                                </linearGradient>
                               </defs>
                               <CartesianGrid strokeDasharray="3 3" stroke="#334155" vertical={false} />
                               <XAxis dataKey="name" stroke="#94a3b8" axisLine={false} tickLine={false} />
-                              <YAxis stroke="#94a3b8" axisLine={false} tickLine={false} />
+                              
+                              {/* Left Axis for Water/Sleep (Low values) */}
+                              <YAxis yAxisId="left" stroke="#94a3b8" axisLine={false} tickLine={false} />
+                              {/* Right Axis for Steps/Calories (High values) */}
+                              <YAxis yAxisId="right" orientation="right" stroke="#94a3b8" axisLine={false} tickLine={false} />
+                              
                               <Tooltip contentStyle={{ backgroundColor: '#0f172a', borderColor: '#334155', borderRadius: '16px', color: '#fff' }} />
-                              <Area type="monotone" dataKey="water" stroke="#38bdf8" strokeWidth={3} fillOpacity={1} fill="url(#colorWater)" name="Water (L)" />
-                              <Area type="monotone" dataKey="sleep" stroke="#a855f7" strokeWidth={3} fillOpacity={1} fill="url(#colorSleep)" name="Sleep (H)" />
+                              
+                              {/* Data lines attached to Left Axis */}
+                              <Area yAxisId="left" type="monotone" dataKey="water" stroke="#38bdf8" strokeWidth={3} fillOpacity={1} fill="url(#colorWater)" name="Water (L)" />
+                              <Area yAxisId="left" type="monotone" dataKey="sleep" stroke="#a855f7" strokeWidth={3} fillOpacity={1} fill="url(#colorSleep)" name="Sleep (H)" />
+                              
+                              {/* Data lines attached to Right Axis */}
+                              <Area yAxisId="right" type="monotone" dataKey="steps" stroke="#34d399" strokeWidth={3} fillOpacity={1} fill="url(#colorSteps)" name="Steps" />
+                              <Area yAxisId="right" type="monotone" dataKey="calories" stroke="#fb923c" strokeWidth={3} fillOpacity={1} fill="url(#colorCalories)" name="Calories (Kcal)" />
                             </AreaChart>
                           </ResponsiveContainer>
                         </div>

@@ -74,7 +74,7 @@ const YogaMeditation = () => {
     { name: 'Brown Noise', icon: Headphones, color: 'text-amber-400', bg: 'bg-amber-500/10' },
   ];
 
-  return (
+return (
     <div className="space-y-8 animate-fade-in pb-16 px-4">
       <div className="bg-gradient-to-br from-indigo-950 via-slate-950 to-teal-950/80 border border-teal-500/20 p-8 md:p-10 rounded-[2.5rem] flex flex-col md:flex-row items-center justify-between gap-8 shadow-[0_40px_120px_-70px_rgba(20,184,166,0.18)] relative overflow-hidden">
         <div className="absolute top-0 right-0 w-64 h-64 bg-teal-500/10 rounded-full blur-3xl pointer-events-none"></div>
@@ -89,18 +89,21 @@ const YogaMeditation = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      {/* FIXED: Added max-w-7xl mx-auto w-full to center the entire grid layout */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 max-w-7xl mx-auto w-full">
         <div className="lg:col-span-7 xl:col-span-8 bg-slate-950/95 backdrop-blur-xl p-8 md:p-12 rounded-[3rem] border border-slate-800 shadow-[0_40px_120px_-70px_rgba(15,23,42,0.35)] relative overflow-hidden">
           <div className="absolute inset-0 opacity-10 pointer-events-none">
             <Lottie animationData={zenAnimation} loop={true} className="w-full h-full object-cover" />
           </div>
           <div className={`absolute inset-0 rounded-[3rem] border-2 transition-colors duration-1000 ${isActive ? 'border-teal-500/20' : 'border-slate-800'}`}></div>
 
-          <h3 className="text-2xl font-black text-slate-50 mb-10 z-10 flex items-center gap-3">
+          {/* FIXED: Added justify-center md:justify-start for better title alignment */}
+          <h3 className="text-2xl font-black text-slate-50 mb-10 z-10 flex items-center justify-center md:justify-start gap-3">
             Focus Session <Sparkles className="text-amber-300" size={20} />
           </h3>
 
-          <div className="relative w-56 h-56 md:w-64 md:h-64 flex items-center justify-center mb-12 z-10">
+          {/* FIXED: Added mx-auto to perfectly center the breathing circle */}
+          <div className="relative w-56 h-56 md:w-64 md:h-64 mx-auto flex items-center justify-center mb-12 z-10">
             <div className={`absolute w-full h-full rounded-full border-2 border-teal-400/40 transition-all duration-[4000ms] ease-in-out ${isActive && phase === 'Breathe In' ? 'scale-[1.8] opacity-0' : 'scale-100 opacity-100'}`}></div>
             <div className={`absolute w-full h-full rounded-full border border-emerald-400/30 transition-all duration-[4000ms] ease-in-out delay-500 ${isActive && phase === 'Breathe In' ? 'scale-[1.6] opacity-0' : 'scale-100 opacity-100'}`}></div>
 
