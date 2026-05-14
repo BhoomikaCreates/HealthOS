@@ -1,9 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Droplets, Plus, Trash2 } from 'lucide-react';
 
 const WaterIntake = () => {
-  const [glasses, setGlasses] = useState(0);
+  
+  // 1. Initialize state by checking LocalStorage first
+  const [glasses, setGlasses] = useState(() => {
+    const savedWater = localStorage.getItem('healthos_water_count');
+    return savedWater ? parseInt(savedWater) : 0;
+  });
+
   const goal = 8;
+
+  // 2. Update LocalStorage silently
+  useEffect(() => {
+    localStorage.setItem('healthos_water_count', glasses);
+  }, [glasses]);
 
   const addGlass = () => {
     if (glasses < goal) setGlasses(glasses + 1);
@@ -24,6 +35,7 @@ const WaterIntake = () => {
         <div className="flex flex-col items-center justify-center bg-slate-900/80 p-10 rounded-[2rem] border border-slate-800 mb-8">
           <div className="flex gap-4 mb-8 flex-wrap justify-center">
             {[...Array(goal)].map((_, index) => (
+              /* YAHAN MISSING THA TERA <div */
               <div
                 key={index}
                 className={`w-12 h-16 rounded-b-3xl border-2 transition-all duration-500 flex items-end p-1 ${index < glasses ? 'border-cyan-400 bg-cyan-400/20 shadow-[0_0_20px_rgba(34,211,238,0.25)]' : 'border-slate-700 bg-slate-900'}`}

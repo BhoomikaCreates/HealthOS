@@ -14,6 +14,7 @@ import WaterIntake from './components/WaterIntake';
 import YogaMeditation from './components/YogaMeditation';
 import SleepSchedule from './components/SleepSchedule';
 import HealthAdvisor from './components/HealthAdvisor';
+import myLogo from './assets/OSlogo.png';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem('token'));
@@ -131,11 +132,14 @@ const fetchHealthData = async () => {
           <Sidebar isOpen={isSidebarOpen} toggleSidebar={() => setIsSidebarOpen(false)} />
 
           <div className="flex-1 flex flex-col min-w-0 transition-all duration-300">
-            <header className="md:hidden flex items-center justify-between px-4 h-16 bg-slate-950/95 border-b border-slate-800 sticky top-0 z-40">
+<header className="md:hidden flex items-center justify-between px-4 h-16 bg-slate-950/95 border-b border-slate-800 sticky top-0 z-40">
               <button onClick={() => setIsSidebarOpen(true)} className="p-2 text-slate-300">
                 <Menu size={24} />
               </button>
-              <span className="font-bold text-white">HealthOS</span>
+              
+             
+              <img src={myLogo} alt="HealthOS Logo" className="h-8 w-auto object-contain drop-shadow-[0_0_10px_rgba(34,211,238,0.5)]" />
+              
               <button onClick={() => setIsProfileOpen(true)} className="w-10 h-10 rounded-full border border-teal-500/50 overflow-hidden">
                 <img src={`https://api.dicebear.com/9.x/micah/svg?seed=${avatarSeed}`} alt="Profile" />
               </button>
