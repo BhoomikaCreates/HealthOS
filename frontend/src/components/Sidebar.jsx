@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link, useLocation } from 'react-router-dom';
+import { Brain } from 'lucide-react';
 import Chatbot from "./Chatbot/chatbot";
 
 // ✅ Props add kiye: isOpen aur toggleSidebar

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Brain, Target, Palette, Type, RotateCcw, Play, Sparkles, CheckCircle2, AlertCircle } from 'lucide-react';
+import { Brain, Target, Palette, Type, RotateCcw, Play, Sparkles, CheckCircle2, AlertCircle, Trophy} from 'lucide-react';
 
 const MindPuzzles = () => {
   const [activeGame, setActiveGame] = useState('reaction');
