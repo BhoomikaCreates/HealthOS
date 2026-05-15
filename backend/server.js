@@ -28,7 +28,10 @@ const app = express();
 const PORT = process.env.PORT || 5005;
 
 // Middlewares to parse JSON and allow cross-origin requests
-app.use(cors());
+app.use(cors({
+  origin: ["https://health-os-mu.vercel.app", "http://localhost:5173", "http://localhost:5174"], // Specific frontend links
+  credentials: true
+}));
 app.use(express.json());
 
 // Establish MongoDB Connection
