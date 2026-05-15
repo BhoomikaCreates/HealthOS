@@ -6,7 +6,7 @@ import React, { useEffect, useState } from "react";
 import Sidebar from "./components/Sidebar";
 import Lottie from "lottie-react";
 import robotAnimation from "./assets/bot.json";
-import { Droplets, Moon, Footprints, Flame, Plus, X, Sparkles, Target, Trophy, Zap, Watch, Share2, Menu } from "lucide-react";
+import { Droplets, Moon, Footprints, Flame, Plus, X, Sparkles, Target, Trophy, Zap, Watch, Share2, Menu, Brain } from "lucide-react";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import WorkoutTracker from "./components/WorkoutTracker/WorkoutTracker";
 import { Routes, Route } from 'react-router-dom';
@@ -14,6 +14,7 @@ import WaterIntake from './components/WaterIntake';
 import YogaMeditation from './components/YogaMeditation';
 import SleepSchedule from './components/SleepSchedule';
 import HealthAdvisor from './components/HealthAdvisor';
+import MindPuzzles from './components/MindPuzzles';
 import myLogo from './assets/OSlogo.png';
 
 function App() {
@@ -312,6 +313,7 @@ const fetchHealthData = async () => {
                   <Route path="/chat" element={<HealthAdvisor />} />
                   <Route path="/yoga" element={<YogaMeditation />} />
                   <Route path="/sleep" element={<SleepSchedule />} />
+                  <Route path="/puzzles" element={<MindPuzzles />} />
                 </Routes>
               </div>
             </main>

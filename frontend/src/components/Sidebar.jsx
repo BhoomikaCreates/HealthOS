@@ -33,6 +33,10 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
           <Link to="/yoga" onClick={toggleSidebar} className={isActive('/yoga') ? activeStyle : inactiveStyle}>🧘 Yoga & Meditation</Link>
           <Link to="/sleep" onClick={toggleSidebar} className={isActive('/sleep') ? activeStyle : inactiveStyle}>😴 Sleep Schedule</Link>
           <Link to="/water" onClick={toggleSidebar} className={isActive('/water') ? activeStyle : inactiveStyle}>💧 Water Intake</Link>
+          <Link to="/puzzles" className="flex items-center gap-3 p-3 rounded-xl hover:bg-slate-800 text-slate-300 hover:text-white transition-all">
+  <Brain size={20} className="text-pink-400" />
+  <span>Mind Puzzles</span>
+</Link>
         </nav>
 
         <div
