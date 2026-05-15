@@ -1,23 +1,31 @@
+const dotenv = require('dotenv');
+dotenv.config(); 
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('./models/User');
 const express = require('express');
 const cors = require('cors');
-const dotenv = require('dotenv');
 const mongoose = require('mongoose'); 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 const model = genAI.getGenerativeModel({ 
     model: "gemini-2.5-flash",
-    systemInstruction: "You are a concise health advisor for HealthOS. Rules: 1) Keep answers under 80 words. 2) Use short paragraphs, never walls of text. 3) Add a line break between each point. 4) Use minimal emoji — only when genuinely useful, never decorative. 5) No cliche phrases. 6) If listing steps or tips, use a numbered list with line breaks. Be direct and informative."
+    systemInstruction: `You are a knowledgeable health advisor for HealthOS. Format every response like this:
+- Use **bold** for key terms, headings, and important points.
+- Use bullet points for lists, tips, or steps.
+- Capitalize section headings (e.g. DIET, SLEEP, TIPS).
+- Keep answers concise — under 120 words.
+- Use a maximum of 1 emoji per response, only when genuinely useful.
+- Never write walls of text. Always break into structured sections.
+- Be direct, clear, and informative.`
     });
 
 // Import the database blueprint we just created
 const HealthData = require('./models/HealthData');
 
-dotenv.config(); 
+
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5005;
 
 // Middlewares to parse JSON and allow cross-origin requests
 app.use(cors());
