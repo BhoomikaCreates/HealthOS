@@ -147,6 +147,7 @@ function App() {
               <div className="mt-10 bg-slate-900 p-6 rounded-2xl border border-slate-800 shadow-lg">
                 <h2 className="text-xl font-bold text-white mb-6">Weekly Progress Overview 📈</h2>
                 <div className="h-72 w-full">
+                  {weeklyData.length > 0 && (
                   <ResponsiveContainer width="100%" height="100%">
                     <AreaChart data={weeklyData}>
                       <defs>
@@ -161,6 +162,7 @@ function App() {
                       <Area type="monotone" dataKey="sleep" stroke="#a855f7" strokeWidth={3} fillOpacity={1} fill="url(#colorSleep)" name="Sleep (H)" />
                     </AreaChart>
                   </ResponsiveContainer>
+                  )}
                 </div>
               </div>
 
