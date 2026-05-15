@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Link, useLocation } from 'react-router-dom';
-import { Brain } from 'lucide-react';
 import Chatbot from "./Chatbot/chatbot";
 
 // ✅ Props add kiye: isOpen aur toggleSidebar
@@ -14,7 +13,6 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
 
   return (
     <>
-      {/* 🌫️ Mobile Overlay: Jab phone pe sidebar khule toh piche ka area dhundla ho jaye */}
       {isOpen && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 md:hidden" onClick={toggleSidebar} />
       )}
@@ -34,10 +32,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
           <Link to="/yoga" onClick={toggleSidebar} className={isActive('/yoga') ? activeStyle : inactiveStyle}>🧘 Yoga & Meditation</Link>
           <Link to="/sleep" onClick={toggleSidebar} className={isActive('/sleep') ? activeStyle : inactiveStyle}>😴 Sleep Schedule</Link>
           <Link to="/water" onClick={toggleSidebar} className={isActive('/water') ? activeStyle : inactiveStyle}>💧 Water Intake</Link>
-          <Link to="/puzzles" className="flex items-center gap-3 p-3 rounded-xl hover:bg-slate-800 text-slate-300 hover:text-white transition-all">
-  <Brain size={20} className="text-pink-400" />
-  <span>Mind Puzzles</span>
-</Link>
+          <Link to="/puzzles" onClick={toggleSidebar} className={isActive('/puzzles') ? activeStyle : inactiveStyle}>🧠 Mind Puzzles</Link>
         </nav>
 
         <div
