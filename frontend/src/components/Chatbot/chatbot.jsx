@@ -14,6 +14,26 @@ const SUGGESTIONS = [
   "Foods that improve focus and memory?",
 ];
 
+const renderMarkdown = (text) => {
+  const lines = text.split('\n');
+  return lines.map((line, i) => {
+    // Bold: **text**
+    const parts = line.split(/\*\*(.*?)\*\*/g).map((part, j) =>
+      j % 2 === 1 ? <strong key={j}>{part}</strong> : part
+    );
+    // Bullet points
+    if (line.startsWith('- ') || line.startsWith('• ')) {
+      return <li key={i} style={{ marginLeft: '14px', marginBottom: '3px' }}>{parts.slice(1)}</li>;
+    }
+    // Capitalize-only lines (section headings like "DIET", "TIPS")
+    if (line === line.toUpperCase() && line.trim().length > 1 && /^[A-Z\s]+$/.test(line.trim())) {
+      return <p key={i} style={{ fontWeight: 700, marginTop: '8px', marginBottom: '2px', letterSpacing: '0.5px', color: '#2dd4bf' }}>{line}</p>;
+    }
+    if (line.trim() === '') return <br key={i} />;
+    return <p key={i} style={{ margin: '2px 0' }}>{parts}</p>;
+  });
+};
+
 const Chatbot = ({ isOpen, setIsOpen }) => {
   const [messages, setMessages] = useState([
     { id: 1, text: "Hey! Ask me anything about your health.", sender: 'bot' }
@@ -57,7 +77,9 @@ const Chatbot = ({ isOpen, setIsOpen }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="chat-window">
+    <>
+      <div className="chat-overlay" onClick={() => setIsOpen(false)} />
+      <div className="chat-window">
       {/* Header */}
       <div className="chat-header">
         <div className="bot-info">
@@ -74,7 +96,9 @@ const Chatbot = ({ isOpen, setIsOpen }) => {
       <div className="chat-messages">
         {messages.map(m => (
           <div key={m.id} className={`message-wrapper ${m.sender}`}>
-            <div className="message-bubble">{m.text}</div>
+            <div className="message-bubble">
+                {m.sender === 'bot' ? <ul style={{listStyle:'none',padding:0,margin:0}}>{renderMarkdown(m.text)}</ul> : m.text}
+              </div>
           </div>
         ))}
 
@@ -117,6 +141,7 @@ const Chatbot = ({ isOpen, setIsOpen }) => {
         <button onClick={() => handleSend()} disabled={!inputText.trim()} className="send-btn">➤</button>
       </div>
     </div>
+    </>
   );
 };
 
