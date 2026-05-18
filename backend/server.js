@@ -23,7 +23,6 @@ const model = genAI.getGenerativeModel({
 // Import the database blueprint we just created
 const HealthData = require('./models/HealthData');
 
-
 const app = express();
 const PORT = process.env.PORT || 5005;
 
@@ -55,7 +54,7 @@ app.post('/api/auth/register', async (req, res) => {
     // Check if user already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res.status(400).json({ error: "User already exists! Log in instead, machha." });
+      return res.status(400).json({ error: "User already exists! Please log in instead." });
     }
 
     // Hash the password (Security step)
@@ -72,7 +71,7 @@ app.post('/api/auth/register', async (req, res) => {
     res.status(201).json({ token, user: { id: newUser._id, name: newUser.name, email: newUser.email } });
   } catch (error) {
     console.error("Signup Error:", error);
-    res.status(500).json({ error: "Server crashed during signup." });
+    res.status(500).json({ error: "Server error during registration." });
   }
 });
 
@@ -84,13 +83,13 @@ app.post('/api/auth/login', async (req, res) => {
     // Find user in database
     const user = await User.findOne({ email });
     if (!user) {
-      return res.status(404).json({ error: "User not found! Register first." });
+      return res.status(404).json({ error: "User not found! Please register first." });
     }
 
     // Check if password matches
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return res.status(400).json({ error: "Wrong password, guru!" });
+      return res.status(400).json({ error: "Invalid credentials. Please try again." });
     }
 
     // Create a token
@@ -99,9 +98,10 @@ app.post('/api/auth/login', async (req, res) => {
     res.status(200).json({ token, user: { id: user._id, name: user.name, email: user.email } });
   } catch (error) {
     console.error("Login Error:", error);
-    res.status(500).json({ error: "Server crashed during login." });
+    res.status(500).json({ error: "Server error during login." });
   }
 });
+
 // 🚀 POST API: Save new activity log to the database
 app.post('/api/health-data', async (req, res) => {
   try {
@@ -149,7 +149,7 @@ app.get('/api/ai-insight', async (req, res) => {
     
     // Fallback if the database is completely empty
     if (!latestData) {
-      return res.status(200).json({ message: "Welcome machha! Log your first activity so I can judge your lifestyle! 🤖" });
+      return res.status(200).json({ message: "Welcome! Log your first activity so I can analyze your lifestyle! 🤖" });
     }
 
     // 2. Initialize the Google Generative AI client
@@ -157,16 +157,16 @@ app.get('/api/ai-insight', async (req, res) => {
     const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
     // 3. Construct the dynamic prompt using the user's actual data
-const prompt = `You are a highly intelligent, witty, and sarcastic AI Health Advisor for a platform called HealthOS. 
+    const prompt = `You are a highly intelligent, witty, and sarcastic AI Health Advisor for a platform called HealthOS. 
 Your objective is to provide evidence-based lifestyle, hydration, sleep, and cognitive health advice, but you must deliver it with sharp, dry sarcasm and a roasting (yet ultimately helpful) tone. 
 
-CRITICAL INSTRUCTION: You must use standard, universally understood language. Strictly DO NOT use any regional slang, local dialects, or Bengaluru accent words (like 'maga', 'guru', 'machaa', or 'da'). Keep the sarcasm standard and corporate-friendly.
+CRITICAL INSTRUCTION: You must use standard, universally understood language. Strictly DO NOT use any regional slang, local dialects, or accent words. Keep the sarcasm standard and corporate-friendly.
 
 Based on the user's latest logged metrics:
-- Sleep: ${userMetrics.sleep} hours
-- Water Intake: ${userMetrics.water} Liters
-- Steps: ${userMetrics.steps}
-- Calories: ${userMetrics.calories} kcal
+- Sleep: ${latestData.sleep} hours
+- Water Intake: ${latestData.water} Liters
+- Steps: ${latestData.steps}
+- Calories: ${latestData.calories} kcal
 
 Provide a short, sarcastic, and actionable lifestyle tip in a maximum of 3 to 4 sentences. Roast the user slightly if their metrics are poor, but always include exactly how they can improve.`;
 
@@ -195,8 +195,8 @@ app.post('/api/chat', async (req, res) => {
         res.status(500).json({ error: "Gemini API Error" });
     }
 });
+
 // Start the Express server
 app.listen(PORT, () => {
   console.log(`✅ Backend Server running on Port ${PORT}`);
-}); 
-
+});
