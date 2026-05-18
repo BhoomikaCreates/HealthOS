@@ -11,7 +11,7 @@ import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 import WorkoutTracker from "./components/WorkoutTracker/WorkoutTracker";
 import { Routes, Route } from 'react-router-dom';
 import WaterIntake from './components/WaterIntake';
-import Chatbot from './components/chatbot';
+import Chatbot from './components/Chatbot/chatbot';
 
 const BACKEND = "https://healthos-6tad.onrender.com";
 
