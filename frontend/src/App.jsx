@@ -11,7 +11,13 @@ import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 import WorkoutTracker from "./components/WorkoutTracker/WorkoutTracker";
 import { Routes, Route } from 'react-router-dom';
 import WaterIntake from './components/WaterIntake';
-import Chatbot from './components/Chatbot/chatbot';
+import Chatbot from './components/Chatbot/chatbot'; // Hooked to nested folder path
+
+// Real Components Connected directly from your file tree structure
+import HealthAdvisor from './components/HealthAdvisor';
+import YogaMeditation from './components/YogaMeditation';
+import SleepSchedule from './components/SleepSchedule';
+import MindPuzzles from './components/MindPuzzles';
 
 const BACKEND = "https://healthos-6tad.onrender.com";
 
@@ -44,7 +50,6 @@ function App() {
           calories: `${latest.calories} Kcal`
         });
         
-        // Updated mapping to include steps and calories into chart data
         setWeeklyData(data.reverse().map((item, index) => ({ 
           name: `Day ${index + 1}`, 
           water: item.water, 
@@ -185,50 +190,31 @@ function App() {
                     ))}
                   </div>
 
-                  {/* Chart Section - Updated with Dual Y-Axis Analytics */}
+                  {/* Chart Section */}
                   <div className="mt-10 bg-slate-900 p-6 rounded-2xl border border-slate-800 shadow-lg">
                     <h2 className="text-xl font-bold text-white mb-6">Weekly Progress Overview 📈</h2>
                     <div className="h-72 w-full">
                       {weeklyData.length > 0 && (
-<ResponsiveContainer width="100%" height="100%">
-  <AreaChart data={weeklyData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
-    <defs>
-      <linearGradient id="colorWater" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.4}/>
-        <stop offset="95%" stopColor="#3b82f6" stopOpacity={0.0}/>
-      </linearGradient>
-      <linearGradient id="colorSleep" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="5%" stopColor="#a855f7" stopOpacity={0.4}/>
-        <stop offset="95%" stopColor="#a855f7" stopOpacity={0.0}/>
-      </linearGradient>
-      <linearGradient id="colorSteps" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="5%" stopColor="#22c55e" stopOpacity={0.3}/>
-        <stop offset="95%" stopColor="#22c55e" stopOpacity={0.0}/>
-      </linearGradient>
-      <linearGradient id="colorCalories" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="5%" stopColor="#f97316" stopOpacity={0.3}/>
-        <stop offset="95%" stopColor="#f97316" stopOpacity={0.0}/>
-      </linearGradient>
-    </defs>
-    <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" vertical={false} />
-    <XAxis dataKey="name" stroke="#64748b" axisLine={false} tickLine={false} />
-    
-    {/* Left Y-Axis for low scale (Water & Sleep) */}
-    <YAxis yAxisId="left" stroke="#64748b" axisLine={false} tickLine={false} />
-    
-    {/* Right Y-Axis for high scale (Steps & Calories) */}
-    <YAxis yAxisId="right" orientation="right" stroke="#64748b" axisLine={false} tickLine={false} />
-    
-    <Tooltip contentStyle={{ backgroundColor: '#0f172a', borderColor: '#1e293b', borderRadius: '12px' }} />
-    <Legend wrapperStyle={{ paddingTop: '10px' }} />
-    
-    {/* Area plots with correct absolute gradient values */}
-    <Area yAxisId="left" type="monotone" dataKey="water" stroke="#3b82f6" strokeWidth={3} fillOpacity={1} fill="url(#colorWater)" name="Water (L)" />
-    <Area yAxisId="left" type="monotone" dataKey="sleep" stroke="#a855f7" strokeWidth={3} fillOpacity={1} fill="url(#colorSleep)" name="Sleep (H)" />
-    <Area yAxisId="right" type="monotone" dataKey="steps" stroke="#22c55e" strokeWidth={3} fillOpacity={1} fill="url(#colorSteps)" name="Steps" />
-    <Area yAxisId="right" type="monotone" dataKey="calories" stroke="#f97316" strokeWidth={3} fillOpacity={1} fill="url(#colorCalories)" name="Calories (Kcal)" />
-  </AreaChart>
-</ResponsiveContainer>
+                        <ResponsiveContainer width="100%" height="100%">
+                          <AreaChart data={weeklyData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
+                            <defs>
+                              <linearGradient id="colorWater" x1="0" y1="0" x2="0" y2="1"><stop offset="5%" stopColor="#3b82f6" stopOpacity={0.4}/><stop offset="95%" stopColor="#3b82f6" stopOpacity={0.0}/></linearGradient>
+                              <linearGradient id="colorSleep" x1="0" y1="0" x2="0" y2="1"><stop offset="5%" stopColor="#a855f7" stopOpacity={0.4}/><stop offset="95%" stopColor="#a855f7" stopOpacity={0.0}/></linearGradient>
+                              <linearGradient id="colorSteps" x1="0" y1="0" x2="0" y2="1"><stop offset="5%" stopColor="#22c55e" stopOpacity={0.3}/><stop offset="95%" stopColor="#22c55e" stopOpacity={0.0}/></linearGradient>
+                              <linearGradient id="colorCalories" x1="0" y1="0" x2="0" y2="1"><stop offset="5%" stopColor="#f97316" stopOpacity={0.3}/><stop offset="95%" stopColor="#f97316" stopOpacity={0.0}/></linearGradient>
+                            </defs>
+                            <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" vertical={false} />
+                            <XAxis dataKey="name" stroke="#64748b" axisLine={false} tickLine={false} />
+                            <YAxis yAxisId="left" stroke="#64748b" axisLine={false} tickLine={false} />
+                            <YAxis yAxisId="right" orientation="right" stroke="#64748b" axisLine={false} tickLine={false} />
+                            <Tooltip contentStyle={{ backgroundColor: '#0f172a', borderColor: '#1e293b', borderRadius: '12px' }} />
+                            <Legend wrapperStyle={{ paddingTop: '10px' }} />
+                            <Area yAxisId="left" type="monotone" dataKey="water" stroke="#3b82f6" strokeWidth={3} fillOpacity={1} fill="url(#colorWater)" name="Water (L)" />
+                            <Area yAxisId="left" type="monotone" dataKey="sleep" stroke="#a855f7" strokeWidth={3} fillOpacity={1} fill="url(#colorSleep)" name="Sleep (H)" />
+                            <Area yAxisId="right" type="monotone" dataKey="steps" stroke="#22c55e" strokeWidth={3} fillOpacity={1} fill="url(#colorSteps)" name="Steps" />
+                            <Area yAxisId="right" type="monotone" dataKey="calories" stroke="#f97316" strokeWidth={3} fillOpacity={1} fill="url(#colorCalories)" name="Calories (Kcal)" />
+                          </AreaChart>
+                        </ResponsiveContainer>
                       )}
                     </div>
                   </div>
@@ -261,13 +247,13 @@ function App() {
                 </>
               } />
 
+              {/* All Operational Dynamic Module Routing */}
               <Route path="/water" element={<WaterIntake />} />
               <Route path="/workout" element={<WorkoutTracker />} />
-              
-              {/* Dummy Routes */}
-              <Route path="/chat" element={<div className="flex flex-col items-center justify-center h-full"><h1 className="text-5xl font-bold text-teal-400 mb-4">🤖 Health Advisor</h1><p className="text-gray-400">Building this component...</p></div>} />
-              <Route path="/yoga" element={<div className="flex flex-col items-center justify-center h-full"><h1 className="text-5xl font-bold text-teal-400 mb-4">🧘 Yoga & Meditation</h1><p className="text-gray-400">Coming soon...</p></div>} />
-              <Route path="/sleep" element={<div className="flex flex-col items-center justify-center h-full"><h1 className="text-5xl font-bold text-teal-400 mb-4">😴 Sleep Schedule</h1><p className="text-gray-400">Coming soon...</p></div>} />
+              <Route path="/chat" element={<HealthAdvisor />} />
+              <Route path="/yoga" element={<YogaMeditation />} />
+              <Route path="/sleep" element={<SleepSchedule />} />
+              <Route path="/puzzles" element={<MindPuzzles />} />
 
             </Routes>
           </div>
