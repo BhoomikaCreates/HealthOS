@@ -12,7 +12,7 @@ import WorkoutTracker from "./components/WorkoutTracker/WorkoutTracker";
 import { Routes, Route } from 'react-router-dom';
 import WaterIntake from './components/WaterIntake';
 
-// 🚀 DIRECT IMPORTS - No Lazy Loading 🚀
+// 🚀 DIRECT IMPORTS OF ALL YOUR NEW MODULES 🚀
 import Chatbot from './components/Chatbot/chatbot'; 
 import HealthAdvisor from './components/HealthAdvisor';
 import YogaMeditation from './components/YogaMeditation';
@@ -127,6 +127,7 @@ function App() {
           <Sidebar />
           <div className="ml-64 p-8 w-full h-screen overflow-y-auto">
             
+            {/* 🎯 HEADER SECTION */}
             <div className="flex justify-between items-center mb-6">
               <div>
                 <h1 className="text-4xl font-bold">{getGreeting()}</h1>
@@ -145,9 +146,11 @@ function App() {
               </div>
             </div>
 
+            {/* 🎯 ROUTES ARCHITECTURE */}
             <Routes>
               <Route path="/" element={
                 <>
+                  {/* AI AGENT BANNER */}
                   <div className="bg-gradient-to-r from-slate-900 to-teal-900/30 border border-teal-500/40 p-6 rounded-3xl mb-10 flex items-center gap-6 shadow-2xl relative overflow-hidden">
                     <div className="absolute top-0 left-0 w-40 h-40 bg-teal-500/10 rounded-full blur-3xl"></div>
                     <div className="relative z-10 w-32 h-32 flex-shrink-0 flex items-center justify-center">
@@ -167,6 +170,7 @@ function App() {
                     </div>
                   </div>
                   
+                  {/* METRICS GRID */}
                   <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
                     {[
                       { label: "Water", val: stats.water, icon: Droplets, color: "text-blue-400", border: "hover:border-blue-500" }, 
@@ -184,6 +188,7 @@ function App() {
                     ))}
                   </div>
 
+                  {/* RECHARTS COMPONENT */}
                   <div className="mt-10 bg-slate-900 p-6 rounded-2xl border border-slate-800 shadow-lg">
                     <h2 className="text-xl font-bold text-white mb-6">Weekly Progress Overview 📈</h2>
                     <div className="h-72 w-full">
@@ -212,6 +217,7 @@ function App() {
                     </div>
                   </div>
 
+                  {/* ACHIEVEMENTS */}
                   <div className="mt-10 mb-10">
                     <h2 className="text-xl font-bold text-white mb-6 flex items-center justify-between gap-2">
                       <div className="flex items-center gap-2">
@@ -249,6 +255,7 @@ function App() {
             </Routes>
           </div>
           
+          {/* 🎯 MODALS SECTION */}
           {isModalOpen && (
             <div className="absolute inset-0 bg-black/80 backdrop-blur-sm flex justify-center items-center z-50">
               <div className="bg-slate-900 border border-slate-700 p-8 rounded-3xl w-full max-w-md relative shadow-2xl">
@@ -281,6 +288,7 @@ function App() {
             avatarSeed={avatarSeed} 
           />
 
+          {/* 🎯 FLOATING CHATBOT BUTTON */}
           <button
             onClick={() => setIsChatOpen(true)}
             className="fixed bottom-6 right-6 z-50 bg-gradient-to-r from-teal-500 to-emerald-500 text-black font-bold px-5 py-3 rounded-full flex items-center gap-2 shadow-lg hover:scale-105 transition-transform"

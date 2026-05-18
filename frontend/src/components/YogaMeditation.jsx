@@ -3,27 +3,26 @@ import { Play, Pause, RotateCcw, Wind, Headphones, Music, Sparkles } from 'lucid
 import Lottie from "lottie-react";
 import zenAnimation from "../assets/medi_zen.json";
 
-const [clickedTrack, setClickedTrack] = useState(null);
-
-const handleTrackClick = (index) => {
-  setClickedTrack(index);
-  setTimeout(() => setClickedTrack(null), 2000);
-};
-
 const YogaMeditation = () => {
+  // ✅ YAHAN HONA CHAHIYE THA HOOK! Moved safely inside the component.
+  const [clickedTrack, setClickedTrack] = useState(null);
+
+  const handleTrackClick = (index) => {
+    setClickedTrack(index);
+    setTimeout(() => setClickedTrack(null), 2000);
+  };
+
   const [isActive, setIsActive] = useState(false);
-  const [timeLeft, setTimeLeft] = useState(300); // 5 minutes default
+  const [timeLeft, setTimeLeft] = useState(300); 
   const [cycleTime, setCycleTime] = useState(0);
   const [phase, setPhase] = useState('Ready');
   const [scale, setScale] = useState('scale-100');
 
-  // Core Timer Logic - Fixed the interval dependency issue
   useEffect(() => {
     let interval = null;
 
     if (isActive && timeLeft > 0) {
       interval = setInterval(() => {
-        // Use the functional state update to avoid dependency on timeLeft
         setTimeLeft((prevTime) => {
           if (prevTime <= 1) {
             clearInterval(interval);
@@ -35,21 +34,17 @@ const YogaMeditation = () => {
           return prevTime - 1;
         });
 
-        // Standard Box Breathing cycle is 16 seconds (4-4-4-4)
         setCycleTime((prevCycle) => (prevCycle + 1) % 16);
       }, 1000);
     }
 
-    // Cleanup function runs when component unmounts or isActive toggles
     return () => {
       if (interval) clearInterval(interval);
     };
-  }, [isActive]); // Only depends on isActive now
+  }, [isActive]); 
 
-  // Phase and Animation State Logic
   useEffect(() => {
     if (!isActive) {
-      // Only show 'Paused' if the timer has started but isn't finished
       if (timeLeft < 300 && timeLeft > 0) {
         setPhase('Paused');
         setScale('scale-100');
@@ -57,7 +52,6 @@ const YogaMeditation = () => {
       return;
     }
 
-    // Determine the breathing phase based on a 16-second cycle
     if (cycleTime < 4) {
       setPhase('Breathe In');
       setScale('scale-[1.4]');
@@ -159,8 +153,7 @@ const YogaMeditation = () => {
           </h3>
           <p className="text-slate-400 text-sm mb-6 italic">(Coming Soon)</p>
 
-<div className="flex-1 overflow-y-auto pr-2 space-y-4 custom-scrollbar">
-        
+          <div className="flex-1 overflow-y-auto pr-2 space-y-4 custom-scrollbar">
             {musicTracks.map((track, i) => (
               <div 
                 key={i} 
@@ -183,7 +176,6 @@ const YogaMeditation = () => {
                   </div>
                 </div>
                 
-                {/* Dynamic Play/Locked Icon */}
                 <div>
                   {clickedTrack === i ? (
                     <span className="text-xs font-bold text-amber-400 bg-amber-400/10 px-2 py-1 rounded-lg">v2.0</span>
@@ -193,7 +185,6 @@ const YogaMeditation = () => {
                 </div>
               </div>
             ))}
-           
           </div>
         </div>
       </div>
