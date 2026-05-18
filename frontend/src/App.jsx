@@ -12,11 +12,9 @@ import WorkoutTracker from "./components/WorkoutTracker/WorkoutTracker";
 import { Routes, Route } from 'react-router-dom';
 import WaterIntake from './components/WaterIntake';
 
-// 🚨 TEMPORARILY DISABLED TO PREVENT BLANK SCREEN CRASH 🚨
-// import Chatbot from './components/Chatbot/chatbot'; 
-// import HealthAdvisor from './components/HealthAdvisor';
-
-// Safe Components
+// 🚀 DIRECT IMPORTS - No Lazy Loading 🚀
+import Chatbot from './components/Chatbot/chatbot'; 
+import HealthAdvisor from './components/HealthAdvisor';
 import YogaMeditation from './components/YogaMeditation';
 import SleepSchedule from './components/SleepSchedule';
 import MindPuzzles from './components/MindPuzzles';
@@ -33,7 +31,7 @@ function App() {
   const [formData, setFormData] = useState({ water: "", sleep: "", steps: "", calories: "" });
   const [aiMessage, setAiMessage] = useState("Analyzing your lifestyle... 🕵️‍♀️");
   const [isProfileOpen, setIsProfileOpen] = useState(false);
-  // const [isChatOpen, setIsChatOpen] = useState(false); // Disabled for now
+  const [isChatOpen, setIsChatOpen] = useState(false);
   
   const userName = localStorage.getItem('userName') || 'User';
   const [avatarSeed, setAvatarSeed] = useState(localStorage.getItem('avatarSeed') || userName);
@@ -243,17 +241,10 @@ function App() {
 
               <Route path="/water" element={<WaterIntake />} />
               <Route path="/workout" element={<WorkoutTracker />} />
+              <Route path="/chat" element={<HealthAdvisor />} />
               <Route path="/yoga" element={<YogaMeditation />} />
               <Route path="/sleep" element={<SleepSchedule />} />
               <Route path="/puzzles" element={<MindPuzzles />} />
-              
-              {/* Fallback route for Chat if user clicks it */}
-              <Route path="/chat" element={
-                <div className="flex flex-col items-center justify-center h-full">
-                  <h1 className="text-4xl font-bold text-teal-400 mb-4">🛠️ AI Advisor Under Maintenance</h1>
-                  <p className="text-gray-400">We are pushing an update to this module. Please check back later.</p>
-                </div>
-              } />
 
             </Routes>
           </div>
@@ -291,11 +282,14 @@ function App() {
           />
 
           <button
-            onClick={() => alert("AI Guru is currently being updated for V2.0!")}
+            onClick={() => setIsChatOpen(true)}
             className="fixed bottom-6 right-6 z-50 bg-gradient-to-r from-teal-500 to-emerald-500 text-black font-bold px-5 py-3 rounded-full flex items-center gap-2 shadow-lg hover:scale-105 transition-transform"
           >
             🤖 Ask Guru
           </button>
+          
+          <Chatbot isOpen={isChatOpen} setIsOpen={setIsChatOpen} />
+
         </div>
       )}
     </>
