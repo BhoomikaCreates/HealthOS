@@ -7,7 +7,7 @@ import Sidebar from "./components/Sidebar";
 import Lottie from "lottie-react";
 import robotAnimation from "./assets/bot.json"; 
 import { Droplets, Moon, Footprints, Flame, Plus, X, Sparkles, Target, Trophy, Zap, Watch, Share2 } from "lucide-react";
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import WorkoutTracker from "./components/WorkoutTracker/WorkoutTracker";
 import { Routes, Route } from 'react-router-dom';
 import WaterIntake from './components/WaterIntake';
