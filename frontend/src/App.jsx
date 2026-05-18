@@ -116,14 +116,15 @@ const fetchHealthData = async () => {
     } catch (error) { alert("Error saving data."); }
   };
 
-  const getGreeting = () => {
+const getGreeting = (userName = "User") => {
+    const firstName = userName.split(' ')[0]; 
     const hour = new Date().getHours();
-    if (hour >= 23 || hour < 4) return "Midnight ah? Sleep schedule on leave aa, guru? 🌚";
-    if (hour < 12) return "Good Morning Bro!💪";
-    if (hour < 18) return "Good Afternoon maga!🤟";
-    return "Good Evening Guru!🤸‍♀️";
-  };
 
+    if (hour >= 23 || hour < 4) return `Late night, ${firstName}? Make sure to get some rest! 🌙`;
+    if (hour < 12) return `Good Morning, ${firstName}! Let's crush your health goals today. 🌅`;
+    if (hour < 18) return `Good Afternoon, ${firstName}! Keep up the great momentum. ☀️`;
+    return `Good Evening, ${firstName}! Time to wind down and review your progress. 🌆`;
+  };
   return (
     <div className={`min-h-screen w-full transition-colors duration-700 ${darkMode ? 'dark bg-slate-950 text-white' : 'bg-gradient-to-br from-slate-50 via-slate-100 to-cyan-100 text-slate-900'}`}>
       {!isAuthenticated ? (

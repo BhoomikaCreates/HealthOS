@@ -3,48 +3,75 @@ import { Play, Pause, RotateCcw, Wind, Headphones, Music, Sparkles } from 'lucid
 import Lottie from "lottie-react";
 import zenAnimation from "../assets/medi_zen.json";
 
+const [clickedTrack, setClickedTrack] = useState(null);
+
+const handleTrackClick = (index) => {
+  setClickedTrack(index);
+  setTimeout(() => setClickedTrack(null), 2000);
+};
+
 const YogaMeditation = () => {
   const [isActive, setIsActive] = useState(false);
-  const [timeLeft, setTimeLeft] = useState(300);
+  const [timeLeft, setTimeLeft] = useState(300); // 5 minutes default
   const [cycleTime, setCycleTime] = useState(0);
   const [phase, setPhase] = useState('Ready');
   const [scale, setScale] = useState('scale-100');
 
+  // Core Timer Logic - Fixed the interval dependency issue
   useEffect(() => {
     let interval = null;
+
     if (isActive && timeLeft > 0) {
       interval = setInterval(() => {
-        setTimeLeft((prev) => prev - 1);
-        setCycleTime((prev) => (prev + 1) % 12);
-      }, 1000);
-    } else if (timeLeft === 0) {
-      setIsActive(false);
-      setPhase('Done 🎉');
-      setScale('scale-100');
-    } else if (!isActive) {
-      setCycleTime(0);
-      setPhase('Paused');
-      setScale('scale-100');
-    }
-    return () => clearInterval(interval);
-  }, [isActive, timeLeft]);
+        // Use the functional state update to avoid dependency on timeLeft
+        setTimeLeft((prevTime) => {
+          if (prevTime <= 1) {
+            clearInterval(interval);
+            setIsActive(false);
+            setPhase('Done 🎉');
+            setScale('scale-100');
+            return 0;
+          }
+          return prevTime - 1;
+        });
 
+        // Standard Box Breathing cycle is 16 seconds (4-4-4-4)
+        setCycleTime((prevCycle) => (prevCycle + 1) % 16);
+      }, 1000);
+    }
+
+    // Cleanup function runs when component unmounts or isActive toggles
+    return () => {
+      if (interval) clearInterval(interval);
+    };
+  }, [isActive]); // Only depends on isActive now
+
+  // Phase and Animation State Logic
   useEffect(() => {
-    if (!isActive) return;
+    if (!isActive) {
+      // Only show 'Paused' if the timer has started but isn't finished
+      if (timeLeft < 300 && timeLeft > 0) {
+        setPhase('Paused');
+        setScale('scale-100');
+      }
+      return;
+    }
+
+    // Determine the breathing phase based on a 16-second cycle
     if (cycleTime < 4) {
       setPhase('Breathe In');
       setScale('scale-[1.4]');
-    } else if (cycleTime < 6) {
+    } else if (cycleTime < 8) {
       setPhase('Hold');
       setScale('scale-[1.4]');
-    } else if (cycleTime < 10) {
+    } else if (cycleTime < 12) {
       setPhase('Breathe Out');
       setScale('scale-100');
     } else {
       setPhase('Hold');
       setScale('scale-100');
     }
-  }, [cycleTime, isActive]);
+  }, [cycleTime, isActive, timeLeft]);
 
   const formatTime = (seconds) => {
     const m = Math.floor(seconds / 60);
@@ -53,7 +80,6 @@ const YogaMeditation = () => {
   };
 
   const toggleSession = () => {
-    if (phase === 'Ready' || phase === 'Done 🎉' || phase === 'Paused') setPhase('Starting...');
     setIsActive(!isActive);
   };
 
@@ -74,7 +100,7 @@ const YogaMeditation = () => {
     { name: 'Brown Noise', icon: Headphones, color: 'text-amber-400', bg: 'bg-amber-500/10' },
   ];
 
-return (
+  return (
     <div className="space-y-8 animate-fade-in pb-16 px-4">
       <div className="bg-gradient-to-br from-indigo-950 via-slate-950 to-teal-950/80 border border-teal-500/20 p-8 md:p-10 rounded-[2.5rem] flex flex-col md:flex-row items-center justify-between gap-8 shadow-[0_40px_120px_-70px_rgba(20,184,166,0.18)] relative overflow-hidden">
         <div className="absolute top-0 right-0 w-64 h-64 bg-teal-500/10 rounded-full blur-3xl pointer-events-none"></div>
@@ -89,7 +115,6 @@ return (
         </div>
       </div>
 
-      {/* FIXED: Added max-w-7xl mx-auto w-full to center the entire grid layout */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 max-w-7xl mx-auto w-full">
         <div className="lg:col-span-7 xl:col-span-8 bg-slate-950/95 backdrop-blur-xl p-8 md:p-12 rounded-[3rem] border border-slate-800 shadow-[0_40px_120px_-70px_rgba(15,23,42,0.35)] relative overflow-hidden">
           <div className="absolute inset-0 opacity-10 pointer-events-none">
@@ -97,12 +122,10 @@ return (
           </div>
           <div className={`absolute inset-0 rounded-[3rem] border-2 transition-colors duration-1000 ${isActive ? 'border-teal-500/20' : 'border-slate-800'}`}></div>
 
-          {/* FIXED: Added justify-center md:justify-start for better title alignment */}
           <h3 className="text-2xl font-black text-slate-50 mb-10 z-10 flex items-center justify-center md:justify-start gap-3">
             Focus Session <Sparkles className="text-amber-300" size={20} />
           </h3>
 
-          {/* FIXED: Added mx-auto to perfectly center the breathing circle */}
           <div className="relative w-56 h-56 md:w-64 md:h-64 mx-auto flex items-center justify-center mb-12 z-10">
             <div className={`absolute w-full h-full rounded-full border-2 border-teal-400/40 transition-all duration-[4000ms] ease-in-out ${isActive && phase === 'Breathe In' ? 'scale-[1.8] opacity-0' : 'scale-100 opacity-100'}`}></div>
             <div className={`absolute w-full h-full rounded-full border border-emerald-400/30 transition-all duration-[4000ms] ease-in-out delay-500 ${isActive && phase === 'Breathe In' ? 'scale-[1.6] opacity-0' : 'scale-100 opacity-100'}`}></div>
@@ -136,18 +159,41 @@ return (
           </h3>
           <p className="text-slate-400 text-sm mb-6 italic">(Coming Soon)</p>
 
-          <div className="flex-1 overflow-y-auto pr-2 space-y-4 custom-scrollbar">
+<div className="flex-1 overflow-y-auto pr-2 space-y-4 custom-scrollbar">
+        
             {musicTracks.map((track, i) => (
-              <div key={i} className="flex items-center gap-4 p-4 rounded-3xl bg-slate-900/80 border border-slate-800 shadow-sm">
-                <div className={`w-12 h-12 rounded-3xl flex items-center justify-center ${track.bg} ${track.color} border border-slate-900`}>
-                  <track.icon size={22} />
+              <div 
+                key={i} 
+                onClick={() => handleTrackClick(i)}
+                className={`flex items-center justify-between p-4 rounded-3xl border shadow-sm cursor-pointer transition-all ${
+                  clickedTrack === i 
+                    ? 'bg-amber-900/20 border-amber-700/50' 
+                    : 'bg-slate-900/80 border-slate-800 hover:bg-slate-800'
+                }`}
+              >
+                <div className="flex items-center gap-4">
+                  <div className={`w-12 h-12 rounded-3xl flex items-center justify-center ${track.bg} ${track.color} border border-slate-900`}>
+                    <track.icon size={22} />
+                  </div>
+                  <div>
+                    <span className={`font-bold ${clickedTrack === i ? 'text-amber-300' : 'text-slate-50'}`}>
+                      {track.name}
+                    </span>
+                    <p className="text-xs text-slate-400 mt-0.5">Instrumental / Ambient</p>
+                  </div>
                 </div>
+                
+                {/* Dynamic Play/Locked Icon */}
                 <div>
-                  <span className="font-bold text-slate-50">{track.name}</span>
-                  <p className="text-xs text-slate-400 mt-0.5">Instrumental / Ambient</p>
+                  {clickedTrack === i ? (
+                    <span className="text-xs font-bold text-amber-400 bg-amber-400/10 px-2 py-1 rounded-lg">v2.0</span>
+                  ) : (
+                    <Play className="text-slate-600 hover:text-slate-400 transition-colors" size={20} />
+                  )}
                 </div>
               </div>
             ))}
+           
           </div>
         </div>
       </div>

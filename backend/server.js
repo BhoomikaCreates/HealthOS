@@ -149,10 +149,18 @@ app.get('/api/ai-insight', async (req, res) => {
     const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
     // 3. Construct the dynamic prompt using the user's actual data
-    const prompt = `You are a sarcastic, highly intelligent AI health agent based in Bengaluru. You frequently use local slang like 'machha', 'guru', 'maga', 'benki'. 
-    Here is the user's health data for today: 
-    Water: ${latestData.water} Liters, Sleep: ${latestData.sleep} Hours, Steps: ${latestData.steps}, Calories: ${latestData.calories} kcal.
-    Analyze this data and provide a 1-sentence sassy roast or praise. Be dramatic but ultimately helpful.`;
+const prompt = `You are a highly intelligent, witty, and sarcastic AI Health Advisor for a platform called HealthOS. 
+Your objective is to provide evidence-based lifestyle, hydration, sleep, and cognitive health advice, but you must deliver it with sharp, dry sarcasm and a roasting (yet ultimately helpful) tone. 
+
+CRITICAL INSTRUCTION: You must use standard, universally understood language. Strictly DO NOT use any regional slang, local dialects, or Bengaluru accent words (like 'maga', 'guru', 'machaa', or 'da'). Keep the sarcasm standard and corporate-friendly.
+
+Based on the user's latest logged metrics:
+- Sleep: ${userMetrics.sleep} hours
+- Water Intake: ${userMetrics.water} Liters
+- Steps: ${userMetrics.steps}
+- Calories: ${userMetrics.calories} kcal
+
+Provide a short, sarcastic, and actionable lifestyle tip in a maximum of 3 to 4 sentences. Roast the user slightly if their metrics are poor, but always include exactly how they can improve.`;
 
     // 4. Generate the response from the Gemini model
     const result = await model.generateContent(prompt);
