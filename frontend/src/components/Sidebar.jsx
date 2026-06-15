@@ -34,22 +34,6 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
           <Link to="/water" onClick={toggleSidebar} className={isActive('/water') ? activeStyle : inactiveStyle}>💧 Water Intake</Link>
           <Link to="/puzzles" onClick={toggleSidebar} className={isActive('/puzzles') ? activeStyle : inactiveStyle}>🧠 Mind Puzzles</Link>
         </nav>
-
-        <div
-          onClick={() => setIsChatOpen(prev => !prev)}
-          className="mt-4 p-4 bg-gradient-to-r from-teal-600 to-teal-500 rounded-2xl cursor-pointer hover:from-teal-500 hover:to-teal-400 transition-all shadow-lg shadow-teal-500/30 shrink-0"
-        >
-          <div className="flex items-center gap-3">
-            <span className="text-2xl">🤖</span>
-            <div>
-              <p className="text-sm font-bold text-white">AI Agent</p>
-              <p className="text-xs text-teal-100 italic">Ask Guru...</p>
-            </div>
-            <span className="ml-auto text-white">{isChatOpen ? '✕' : '↑'}</span>
-          </div>
-        </div>
-
-        <Chatbot isOpen={isChatOpen} setIsOpen={setIsChatOpen} />
       </div>
     </>
   );

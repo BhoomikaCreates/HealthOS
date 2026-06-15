@@ -293,7 +293,7 @@ function App() {
             onClick={() => setIsChatOpen(true)}
             className="fixed bottom-6 right-6 z-50 bg-gradient-to-r from-teal-500 to-emerald-500 text-black font-bold px-5 py-3 rounded-full flex items-center gap-2 shadow-lg hover:scale-105 transition-transform"
           >
-            🤖 Ask Guru
+            🤖 Ask Health Agent
           </button>
           
           <Chatbot isOpen={isChatOpen} setIsOpen={setIsChatOpen} />
