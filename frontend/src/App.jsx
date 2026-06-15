@@ -291,7 +291,7 @@ function App() {
           {/* 🎯 FLOATING CHATBOT BUTTON */}
           <button
             onClick={() => setIsChatOpen(true)}
-            className="fixed bottom-6 right-6 z-50 bg-gradient-to-r from-teal-500 to-emerald-500 text-black font-bold px-5 py-3 rounded-full flex items-center gap-2 shadow-lg hover:scale-105 transition-transform"
+            className="fixed bottom-6 right-6 z-50 bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-bold px-5 py-3 rounded-full flex items-center gap-2 shadow-lg hover:scale-105 hover:from-indigo-400 hover:to-purple-500 transition-all border border-purple-400"
           >
             🤖 Ask Health Agent
           </button>
