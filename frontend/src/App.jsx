@@ -289,12 +289,12 @@ function App() {
           />
 
           {/* 🎯 FLOATING CHATBOT BUTTON */}
-          <button
-            onClick={() => setIsChatOpen(true)}
-            className="fixed bottom-6 right-6 z-50 bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-bold px-5 py-3 rounded-full flex items-center gap-2 shadow-lg hover:scale-105 hover:from-indigo-400 hover:to-purple-500 transition-all border border-purple-400"
-          >
-            🤖 Ask Health Agent
-          </button>
+<button
+  onClick={() => setIsChatOpen(true)}
+  className="fixed bottom-6 right-6 z-50 bg-gradient-to-r from-indigo-600 to-purple-700 text-white font-bold px-6 py-3.5 rounded-full flex items-center gap-2 shadow-2xl hover:scale-105 hover:from-indigo-500 hover:to-purple-600 transition-all border border-purple-500/40"
+>
+  🤖 Ask Health Agent
+</button>
           
           <Chatbot isOpen={isChatOpen} setIsOpen={setIsChatOpen} />
 
